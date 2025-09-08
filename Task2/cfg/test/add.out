@@ -1,0 +1,8 @@
+block: main
+{"dest":"v0","label":null,"op":"const","type":"int","value":1}
+{"dest":"v1","label":null,"op":"const","type":"int","value":2}
+{"args":["v0","v1"],"dest":"v2","label":null,"op":"add","type":"int"}
+{"args":["v2"],"label":null,"op":"print"}
+-----
+
+Connections:
