@@ -1,0 +1,7 @@
+@main {
+  a: int = const 5;
+  b: int = const 8;
+  c: bool = le a b;
+  d: bool = not c;
+  print d;
+}

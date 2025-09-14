@@ -39,14 +39,13 @@ void printTable(const std::map<std::vector<int>, std::pair<int, std::string>> &t
     }
 }
 
-int constant_folding(const std::string &op, const std::vector<int> &args, bool &success)
+int constant_folding_int(const std::string &op, const std::vector<int> &args, bool &success)
 {
     if (args.size() != 2)
     {
         success = false;
         return 0;
     }
-    success = true;
     if (op == "add")
     {
         return args[0] + args[1];
@@ -63,37 +62,52 @@ int constant_folding(const std::string &op, const std::vector<int> &args, bool &
     {
         return args[0] / args[1];
     }
-    else if (op == "eq")
+    success = false;
+    return 0;
+}
+
+bool constant_folding_bool(const std::string &op, const std::vector<int> &args, bool &success)
+{
+    if (op == "not" && args.size() == 1)
     {
-        return (args[0] == args[1]) ? 1 : 0;
+        return (args[0] == 0) ? true : false;
+    }
+    if (args.size() != 2)
+    {
+        success = false;
+        return false;
+    }
+    if (op == "eq")
+    {
+        return (args[0] == args[1]) ? true : false;
     }
     else if (op == "ne")
     {
-        return (args[0] != args[1]) ? 1 : 0;
+        return (args[0] != args[1]) ? true : false;
     }
     else if (op == "lt")
     {
-        return (args[0] < args[1]) ? 1 : 0;
+        return (args[0] < args[1]) ? true : false;
     }
     else if (op == "le")
     {
-        return (args[0] <= args[1]) ? 1 : 0;
+        return (args[0] <= args[1]) ? true : false;
     }
     else if (op == "gt")
     {
-        return (args[0] > args[1]) ? 1 : 0;
+        return (args[0] > args[1]) ? true : false;
     }
     else if (op == "ge")
     {
-        return (args[0] >= args[1]) ? 1 : 0;
+        return (args[0] >= args[1]) ? true : false;
     }
     else if (op == "and")
     {
-        return (args[0] && args[1]) ? 1 : 0;
+        return (args[0] && args[1]) ? true : false;
     }
     else if (op == "or")
     {
-        return (args[0] || args[1]) ? 1 : 0;
+        return (args[0] || args[1]) ? true : false;
     }
     success = false;
     return 0;
@@ -199,17 +213,34 @@ bool localValueNumbering(json &j)
                     }
                     if (argVals.size() == instr["args"].size()) // constant folding
                     {
-                        bool success = false;
-                        int folded = constant_folding(op, argVals, success);
-                        if (success)
+                        bool success = true;
+                        if (instr["op"] == "add" || instr["op"] == "sub" || instr["op"] == "mul" || instr["op"] == "div")
                         {
-                            instr = {
-                                {"op", "const"},
-                                {"value", folded},
-                                {"dest", instr["dest"]}};
-                            var2num[instr["dest"]] = num;
-                            const2var[instr["dest"]] = folded;
-                            changed = true;
+                            int folded = constant_folding_int(op, argVals, success);
+                            if (success)
+                            {
+                                instr = {
+                                    {"op", "const"},
+                                    {"value", folded},
+                                    {"dest", instr["dest"]}};
+                                var2num[instr["dest"]] = num;
+                                const2var[instr["dest"]] = folded;
+                                changed = true;
+                            }
+                        }
+                        else
+                        {
+                            auto folded = constant_folding_bool(op, argVals, success);
+                            if (success)
+                            {
+                                instr = {
+                                    {"op", "const"},
+                                    {"value", folded},
+                                    {"dest", instr["dest"]}};
+                                var2num[instr["dest"]] = num;
+                                const2var[instr["dest"]] = folded;
+                                changed = true;
+                            }
                         }
                     }
                 }

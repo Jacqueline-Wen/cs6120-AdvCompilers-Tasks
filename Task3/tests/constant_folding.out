@@ -1,0 +1,20 @@
+{
+    "functions": [
+        {
+            "instrs": [
+                {
+                    "dest": "d",
+                    "op": "const",
+                    "value": false
+                },
+                {
+                    "args": [
+                        "d"
+                    ],
+                    "op": "print"
+                }
+            ],
+            "name": "main"
+        }
+    ]
+}

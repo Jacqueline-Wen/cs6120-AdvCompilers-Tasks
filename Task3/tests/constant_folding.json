@@ -1,0 +1,44 @@
+{
+    "functions": [
+        {
+            "instrs": [
+                {
+                    "dest": "a",
+                    "op": "const",
+                    "type": "int",
+                    "value": 5
+                },
+                {
+                    "dest": "b",
+                    "op": "const",
+                    "type": "int",
+                    "value": 8
+                },
+                {
+                    "args": [
+                        "a",
+                        "b"
+                    ],
+                    "dest": "c",
+                    "op": "le",
+                    "type": "bool"
+                },
+                {
+                    "args": [
+                        "c"
+                    ],
+                    "dest": "d",
+                    "op": "not",
+                    "type": "bool"
+                },
+                {
+                    "args": [
+                        "d"
+                    ],
+                    "op": "print"
+                }
+            ],
+            "name": "main"
+        }
+    ]
+}
