@@ -39,11 +39,72 @@ void printTable(const std::map<std::vector<int>, std::pair<int, std::string>> &t
     }
 }
 
+int constant_folding(const std::string &op, const std::vector<int> &args, bool &success)
+{
+    if (args.size() != 2)
+    {
+        success = false;
+        return 0;
+    }
+    success = true;
+    if (op == "add")
+    {
+        return args[0] + args[1];
+    }
+    else if (op == "sub")
+    {
+        return args[0] - args[1];
+    }
+    else if (op == "mul")
+    {
+        return args[0] * args[1];
+    }
+    else if (op == "div")
+    {
+        return args[0] / args[1];
+    }
+    else if (op == "eq")
+    {
+        return (args[0] == args[1]) ? 1 : 0;
+    }
+    else if (op == "ne")
+    {
+        return (args[0] != args[1]) ? 1 : 0;
+    }
+    else if (op == "lt")
+    {
+        return (args[0] < args[1]) ? 1 : 0;
+    }
+    else if (op == "le")
+    {
+        return (args[0] <= args[1]) ? 1 : 0;
+    }
+    else if (op == "gt")
+    {
+        return (args[0] > args[1]) ? 1 : 0;
+    }
+    else if (op == "ge")
+    {
+        return (args[0] >= args[1]) ? 1 : 0;
+    }
+    else if (op == "and")
+    {
+        return (args[0] && args[1]) ? 1 : 0;
+    }
+    else if (op == "or")
+    {
+        return (args[0] || args[1]) ? 1 : 0;
+    }
+    success = false;
+    return 0;
+}
+
 bool localValueNumbering(json &j)
 {
     bool changed = false;
     map<vector<int>, pair<int, string>> table;
     map<string, int> var2num;
+    map<string, int> const2var; // map from const value (string) to var num (int)
     std::set<std::string> commutative_ops = {"add", "mul", "eq", "ne", "and", "or"};
     for (auto &function : j["functions"])
     {
@@ -59,6 +120,7 @@ bool localValueNumbering(json &j)
             if (instr["op"] == "const")
             {
                 value.push_back(instr["value"]);
+                const2var[instr["dest"]] = instr["value"];
             }
 
             if (instr.contains("args"))
@@ -114,6 +176,7 @@ bool localValueNumbering(json &j)
 
                 if (instr.contains("args"))
                 {
+                    std::vector<int> argVals;
                     for (auto &a : instr["args"])
                     {
                         string var = a;
@@ -125,9 +188,28 @@ bool localValueNumbering(json &j)
                                 if (kv.second.first == tempNum)
                                 {
                                     a = kv.second.second;
+                                    if (const2var.count(a))
+                                    {
+                                        argVals.push_back(const2var[a]);
+                                    }
                                     break;
                                 }
                             }
+                        }
+                    }
+                    if (argVals.size() == instr["args"].size()) // constant folding
+                    {
+                        bool success = false;
+                        int folded = constant_folding(op, argVals, success);
+                        if (success)
+                        {
+                            instr = {
+                                {"op", "const"},
+                                {"value", folded},
+                                {"dest", instr["dest"]}};
+                            var2num[instr["dest"]] = num;
+                            const2var[instr["dest"]] = folded;
+                            changed = true;
                         }
                     }
                 }

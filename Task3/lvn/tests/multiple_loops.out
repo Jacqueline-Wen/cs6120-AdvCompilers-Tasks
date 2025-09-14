@@ -15,13 +15,9 @@
                     "value": 2
                 },
                 {
-                    "args": [
-                        "a",
-                        "b"
-                    ],
                     "dest": "c",
-                    "op": "add",
-                    "type": "int"
+                    "op": "const",
+                    "value": 3
                 },
                 {
                     "args": [
