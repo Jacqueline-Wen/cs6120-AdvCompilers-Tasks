@@ -1,1 +1,1 @@
-command = "g++ dce.cpp -I/opt/homebrew/include -std=c++17 -o dce && ./dce {filename}"
+command = "g++ dce.cpp -I/opt/homebrew/include -std=c++17 -o dce && bril2json <  {filename} | ./dce"
