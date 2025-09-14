@@ -25,16 +25,14 @@
                 },
                 {
                     "args": [
-                        "b",
-                        "a"
+                        "c"
                     ],
                     "dest": "d",
-                    "op": "add",
-                    "type": "int"
+                    "op": "id"
                 },
                 {
                     "args": [
-                        "d"
+                        "c"
                     ],
                     "dest": "e",
                     "op": "id",
@@ -42,7 +40,7 @@
                 },
                 {
                     "args": [
-                        "e"
+                        "c"
                     ],
                     "op": "print"
                 }

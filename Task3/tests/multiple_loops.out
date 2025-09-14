@@ -9,9 +9,15 @@
                     "value": 1
                 },
                 {
+                    "dest": "b",
+                    "op": "const",
+                    "type": "int",
+                    "value": 2
+                },
+                {
                     "args": [
                         "a",
-                        "a"
+                        "b"
                     ],
                     "dest": "c",
                     "op": "add",
@@ -20,13 +26,6 @@
                 {
                     "args": [
                         "c"
-                    ],
-                    "dest": "d",
-                    "op": "id"
-                },
-                {
-                    "args": [
-                        "d"
                     ],
                     "op": "print"
                 }

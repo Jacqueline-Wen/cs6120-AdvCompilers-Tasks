@@ -6,7 +6,7 @@
                     "dest": "a",
                     "op": "const",
                     "type": "int",
-                    "value": 1
+                    "value": 4
                 },
                 {
                     "dest": "b",
@@ -19,30 +19,31 @@
                         "a",
                         "b"
                     ],
-                    "dest": "c",
+                    "dest": "sum1",
                     "op": "add",
                     "type": "int"
                 },
                 {
                     "args": [
-                        "b",
-                        "a"
+                        "a",
+                        "b"
                     ],
-                    "dest": "d",
+                    "dest": "sum2",
                     "op": "add",
                     "type": "int"
                 },
                 {
                     "args": [
-                        "d"
+                        "sum1",
+                        "sum2"
                     ],
-                    "dest": "e",
-                    "op": "id",
+                    "dest": "prod",
+                    "op": "mul",
                     "type": "int"
                 },
                 {
                     "args": [
-                        "e"
+                        "prod"
                     ],
                     "op": "print"
                 }

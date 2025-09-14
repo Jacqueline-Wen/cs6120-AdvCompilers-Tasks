@@ -1,1 +1,1 @@
-command = "g++ lvn.cpp -I/opt/homebrew/include -std=c++17 -o lvn && ./lvn {filename}"
+command = "g++ lvn.cpp -I/opt/homebrew/include -std=c++17 -o lvn && bril2json < {filename} | ./lvn"
