@@ -178,7 +178,8 @@ bool localValueNumbering(json &j)
                 instr = {
                     {"op", "id"},
                     {"args", json::array({var})},
-                    {"dest", instr["dest"]}};
+                    {"dest", instr["dest"]},
+                    {"type", instr["type"]}};
                 var2num[instr["dest"]] = num;
                 changed = true;
             }
@@ -222,7 +223,8 @@ bool localValueNumbering(json &j)
                                 instr = {
                                     {"op", "const"},
                                     {"value", folded},
-                                    {"dest", instr["dest"]}};
+                                    {"dest", instr["dest"]},
+                                    {"type", instr["type"]}};
                                 var2num[instr["dest"]] = num;
                                 const2var[instr["dest"]] = folded;
                                 changed = true;
@@ -236,7 +238,8 @@ bool localValueNumbering(json &j)
                                 instr = {
                                     {"op", "const"},
                                     {"value", folded},
-                                    {"dest", instr["dest"]}};
+                                    {"dest", instr["dest"]},
+                                    {"type", instr["type"]}};
                                 var2num[instr["dest"]] = num;
                                 const2var[instr["dest"]] = folded;
                                 changed = true;
@@ -270,6 +273,6 @@ int main(int argc, char *argv[])
         notConverged = localValueNumbering(j);
     }
 
-    std::cout << j.dump(4) << std::endl;
+    std::cout << j << std::endl;
     return 0;
 }

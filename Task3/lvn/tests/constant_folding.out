@@ -17,11 +17,13 @@
                 {
                     "dest": "c",
                     "op": "const",
+                    "type": "bool",
                     "value": true
                 },
                 {
                     "dest": "d",
                     "op": "const",
+                    "type": "bool",
                     "value": false
                 },
                 {

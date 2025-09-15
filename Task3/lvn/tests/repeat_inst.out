@@ -17,6 +17,7 @@
                 {
                     "dest": "sum1",
                     "op": "const",
+                    "type": "int",
                     "value": 6
                 },
                 {
@@ -24,11 +25,13 @@
                         "sum1"
                     ],
                     "dest": "sum2",
-                    "op": "id"
+                    "op": "id",
+                    "type": "int"
                 },
                 {
                     "dest": "prod",
                     "op": "const",
+                    "type": "int",
                     "value": 36
                 },
                 {

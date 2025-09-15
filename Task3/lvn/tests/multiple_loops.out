@@ -17,6 +17,7 @@
                 {
                     "dest": "c",
                     "op": "const",
+                    "type": "int",
                     "value": 3
                 },
                 {
@@ -24,7 +25,8 @@
                         "c"
                     ],
                     "dest": "d",
-                    "op": "id"
+                    "op": "id",
+                    "type": "int"
                 },
                 {
                     "args": [
