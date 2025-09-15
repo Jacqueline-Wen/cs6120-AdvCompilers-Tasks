@@ -129,7 +129,7 @@ bool localValueNumbering(json &j)
         {
             // Building the value tuple
             vector<int> value;
-            if (instr["op"].is_null()){
+            if (!instr.contains("op")){
                 continue;
             }
             string op = instr["op"];
