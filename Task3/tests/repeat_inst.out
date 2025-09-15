@@ -5,6 +5,7 @@
                 {
                     "dest": "prod",
                     "op": "const",
+                    "type": "int",
                     "value": 36
                 },
                 {

@@ -5,6 +5,7 @@
                 {
                     "dest": "d",
                     "op": "const",
+                    "type": "bool",
                     "value": false
                 },
                 {

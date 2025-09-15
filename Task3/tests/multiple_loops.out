@@ -5,6 +5,7 @@
                 {
                     "dest": "c",
                     "op": "const",
+                    "type": "int",
                     "value": 3
                 },
                 {
