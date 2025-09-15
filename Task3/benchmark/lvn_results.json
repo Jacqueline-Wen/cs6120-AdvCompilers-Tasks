@@ -2,8 +2,8 @@
     "clobber-arg.bril": {
         "original_lines": 6,
         "original_dyn_inst": 3,
-        "optimized_lines": 0,
-        "optimized_dyn_inst": null
+        "optimized_lines": 3,
+        "optimized_dyn_inst": 0
     },
     "clobber-fold.bril": {
         "original_lines": 21,
@@ -26,20 +26,20 @@
     "divide-by-zero.bril": {
         "original_lines": 7,
         "original_dyn_inst": null,
-        "optimized_lines": 0,
+        "optimized_lines": 7,
         "optimized_dyn_inst": null
     },
     "fold-comparisons.bril": {
         "original_lines": 22,
         "original_dyn_inst": null,
-        "optimized_lines": 0,
+        "optimized_lines": 2,
         "optimized_dyn_inst": null
     },
     "idchain-nonlocal.bril": {
         "original_lines": 10,
         "original_dyn_inst": 6,
-        "optimized_lines": 0,
-        "optimized_dyn_inst": null
+        "optimized_lines": 6,
+        "optimized_dyn_inst": 3
     },
     "idchain-prop.bril": {
         "original_lines": 8,
@@ -56,20 +56,20 @@
     "logical-operators.bril": {
         "original_lines": 26,
         "original_dyn_inst": null,
-        "optimized_lines": 0,
+        "optimized_lines": 2,
         "optimized_dyn_inst": null
     },
     "nonlocal-clobber.bril": {
         "original_lines": 8,
         "original_dyn_inst": 4,
-        "optimized_lines": 0,
-        "optimized_dyn_inst": null
+        "optimized_lines": 5,
+        "optimized_dyn_inst": 2
     },
     "nonlocal.bril": {
         "original_lines": 10,
         "original_dyn_inst": 7,
-        "optimized_lines": 0,
-        "optimized_dyn_inst": null
+        "optimized_lines": 6,
+        "optimized_dyn_inst": 3
     },
     "reassign.bril": {
         "original_lines": 5,
