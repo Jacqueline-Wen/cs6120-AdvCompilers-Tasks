@@ -13,6 +13,7 @@ bool removeReassign(json &j)
     bool changed = false;
     for (auto &function : j["functions"])
     {
+        set<string> allArgs;
         map<string, int> previousUsage;
         map<string, int> previousAssign;
         set<int> linesToRemove;
@@ -23,6 +24,7 @@ bool removeReassign(json &j)
             if (!instr["dest"].is_null())
             {
                 string d = instr["dest"];
+                allArgs.insert(d);
                 if (previousAssign[d] > previousUsage[d])
                 {
                     linesToRemove.insert(previousAssign[d]);
@@ -34,6 +36,12 @@ bool removeReassign(json &j)
                 previousUsage[a] = counter;
             }
             counter++;
+        }
+
+        for (auto a: allArgs) {
+            if (previousAssign[a] >= previousUsage[a]) {
+                linesToRemove.insert(previousAssign[a]);
+            }
         }
 
         auto &instrs = function["instrs"];
