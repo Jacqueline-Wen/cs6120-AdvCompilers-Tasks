@@ -129,6 +129,9 @@ bool localValueNumbering(json &j)
         {
             // Building the value tuple
             vector<int> value;
+            if (instr["op"].is_null()){
+                continue;
+            }
             string op = instr["op"];
             value.push_back(hash<string>{}(op));
             if (instr["op"] == "const")

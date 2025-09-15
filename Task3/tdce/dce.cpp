@@ -39,12 +39,15 @@ bool removeReassign(json &j)
         auto &instrs = function["instrs"];
 
         counter = 1;
-        for (auto it = instrs.begin(); it != instrs.end(); ++it)
+        for (auto it = instrs.begin(); it != instrs.end();)
         {
             if (linesToRemove.find(counter) != linesToRemove.end())
             {
                 it = instrs.erase(it);
                 changed = true;
+            }
+            else {
+                it++;
             }
             counter++;
         }
@@ -70,7 +73,7 @@ bool removeUnusedVar(json &j)
 
         auto &instrs = function["instrs"];
 
-        for (auto it = instrs.begin(); it != instrs.end(); ++it)
+        for (auto it = instrs.begin(); it != instrs.end();)
         {
             if (it -> contains("dest"))
             {
@@ -80,6 +83,9 @@ bool removeUnusedVar(json &j)
                     it = instrs.erase(it);
                     changed = true;
                     continue;
+                }
+                else{
+                    it++;
                 }
             }
         }
