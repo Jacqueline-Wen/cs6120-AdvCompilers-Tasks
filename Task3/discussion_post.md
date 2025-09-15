@@ -29,3 +29,22 @@ For all three extensions, we rely on dead code elimination to clean up any unnec
 
 
 **Testing**
+
+Our testing process involved both hand-crafted unit tests and automated benchmark evaluations to verify correctness and measure the effectiveness of our optimizations.
+
+For our hand-crafted tests, we wrote small, focused Bril programs to test LVN (`lvn/tests`), DCE (`tdce/tests`), and the combined LVN + DCE pipeline (`tests/`). There programs were designed to target specific test cases, such as constant folding, repeated instructions, etc.
+
+For a more comprehensive evaluation, we used Bril programs from the official Bril repository (`bril/examples/test/lvn/`), placed under `benchmark/tests`. We built a Python script to automatically run every one of these `.bril` programs in two configurations: the baseline (no optimizations) and optimized (LVN + DCE). This script measured both the static program size (line counts) and dynamic instruction counts. These results are stored in `lvn_results.json`.
+
+To interpret these results more clearly, we also generated the bar charts below with `graph.py`.
+
+<img src="benchmark/lines_comparison.png" alt="lines comparison" width="400"/>
+<img src="benchmark/dyn_inst_comparison.png" alt="dyn inst comparison" width="400"/>
+
+**Hardest Part**
+
+The hardest part was debugging. Debugging errors that occurred was tricky because Bril programs don’t provide detailed error traces. We often had to manually inspect various intermediate outputs to pinpoint the specific issue. Errors could occur at many different stages of the pipeline: parsing JSON inputs, in the LVN implementation, in the DCE logic, etc. For example, when the bug was in LVN, it was tricky to narrow down whether the problem came from copy propagation, handling of the "op" field, or value numbering itself. Because of this, debugging required a lot of careful trial and error, rerunning programs with slight variations, and checking outputs step by step.
+
+**Michelin Star**
+
+We believe our code deserves michelin stars. After wrestling with debugging and fixing various issues, we were able to implement LVN and DCE meticulously in C++. Furthermore, we not only implemented a trivial version of LVN and DCE. We extended our implementation to perform commutative operations, constant folding, and copy propogation.

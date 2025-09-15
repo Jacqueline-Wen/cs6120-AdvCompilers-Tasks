@@ -23,7 +23,7 @@ for f in files:
         original_dyn.append(og)
         optimized_dyn.append(opt)
 
-# --- Plot 1: Lines ---
+# plot 1
 x = range(len(files))
 plt.figure(figsize=(10, 5))
 plt.bar(x, original_lines, width=0.4, label="Original Lines", align="center")
@@ -36,7 +36,7 @@ plt.tight_layout()
 plt.savefig("lines_comparison.png")
 plt.show()
 
-# --- Plot 2: Dynamic Instructions ---
+# plot 2
 x = range(len(dyn_files))
 plt.figure(figsize=(10, 5))
 plt.bar(x, original_dyn, width=0.4, label="Original Dyn Inst", align="center")
