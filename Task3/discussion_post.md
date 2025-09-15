@@ -7,6 +7,13 @@ Serena Zhang (syz8), Maggie Gao (mg2447), Jacqueline Wen (jw2347)
 
 **Dead Code Elimination**
 
+For the trivial implementation of dead code elimination, we supported two main functionalities: remove unused variables and remove variables that were reassigned before they were used. 
+
+For removing variables that were unused, I created a map that tracked whether a variable was used, as well as a set that tracked all variables that were created. I then compared the set with the map and removed the unused variables. 
+
+For removing unused variables that were reassigned, I created maps to track when variables were last assigned and last used. If I came across a variable assignment where the variable was previously assigned after it was used, I would remove the variable assignment.
+
+For testing, I tested my implementation against some basic test casses. 
 
 **Local Value Numbering**
 
