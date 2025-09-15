@@ -1,16 +1,18 @@
-extract = 'total_dyn_inst: (\d+)'
-benchmarks = './tests/*.bril'
+benchmarks = "./tests/*.bril"
+
+extract = 'total_dyn_inst:\s*(\d+)'
 
 [runs.baseline]
 pipeline = [
     "bril2json",
-    "brili -p {args}",
+    "brili -p"
 ]
 
 [runs.opt]
 pipeline = [
     "bril2json",
+    "./dce_exec",
     "./lvn_exec",
     "./dce_exec",
-    "brili -p {args}",
+    "brili -p"
 ]
