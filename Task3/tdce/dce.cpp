@@ -58,11 +58,13 @@ bool removeUnusedVar(json &j)
     for (auto &function : j["functions"])
     {
         map<string, bool> varUsed;
-        for (auto instr : function["instrs"])
+        for (auto &instr : function["instrs"])
         {
-            for (auto a : instr["args"])
-            {
-                varUsed[a] = true;
+            if (instr.contains("args")){
+                for (auto &a : instr["args"])
+                {
+                    varUsed[a] = true;
+                }
             }
         }
 
@@ -70,7 +72,7 @@ bool removeUnusedVar(json &j)
 
         for (auto it = instrs.begin(); it != instrs.end(); ++it)
         {
-            if ((*it).contains("dest"))
+            if (it -> contains("dest"))
             {
                 string d = (*it)["dest"];
                 if (!varUsed[d])
@@ -89,8 +91,15 @@ int main(int argc, char *argv[])
 {
     // std::ifstream f(argv[1]);
     // json j = json::parse(f);
+    // json j;
+    // std::cin >> j;
     json j;
-    std::cin >> j;
+    try {
+        std::cin >> j;
+    } catch (const json::parse_error& e) {
+        std::cerr << "ERROR: Failed to parse JSON from stdin: " << e.what() << std::endl;
+        return 1;
+    }
 
     bool notConverged = true;
 
