@@ -1,4 +1,4 @@
-benchmarks = "./tests/*.bril"
+benchmarks = "./core/*.bril"
 
 extract = 'total_dyn_inst:\s*(\d+)'
 
