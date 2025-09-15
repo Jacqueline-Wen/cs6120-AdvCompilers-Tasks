@@ -58,7 +58,7 @@ int constant_folding_int(const std::string &op, const std::vector<int> &args, bo
     {
         return args[0] * args[1];
     }
-    else if (op == "div")
+    else if (op == "div" && args[1] != 0)
     {
         return args[0] / args[1];
     }
