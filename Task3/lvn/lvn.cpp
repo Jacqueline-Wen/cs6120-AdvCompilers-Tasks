@@ -113,27 +113,44 @@ bool constant_folding_bool(const std::string &op, const std::vector<int> &args, 
     return 0;
 }
 
-bool localValueNumbering(json &j)
+bool localValueNumbering(json &j, std::map<std::string, std::vector<int>> varToLines)
 {
     bool changed = false;
     map<vector<int>, pair<int, string>> table;
     map<string, int> var2num;
     map<string, int> const2var; // map from const value (string) to var num (int)
     std::set<std::string> commutative_ops = {"add", "mul", "eq", "ne", "and", "or"};
+    map<string, pair<int, string>> renamedVars;
     for (auto &function : j["functions"])
     {
         int nextNum = 1;
 
         auto &instrs = function["instrs"];
-        for (auto &instr : instrs)
+        for (size_t i = 0; i < instrs.size(); ++i)
         {
+            auto &instr = instrs[i];
             // Building the value tuple
             vector<int> value;
-            if (!instr.contains("op")){
+            if (!instr.contains("op"))
+            {
                 continue;
             }
             string op = instr["op"];
             value.push_back(hash<string>{}(op));
+            if (instr.contains("dest"))
+            {
+                string dest = instr["dest"];
+                for (auto &line : varToLines[dest]) // check if dest is redefined later
+                {
+                    if (line > (int)i)
+                    {
+                        dest = string(instr["dest"]) + "_copy" + to_string(i); // rename dest
+                        renamedVars[string(instr["dest"])] = {line, dest};
+                        instr["dest"] = dest;
+                        break;
+                    }
+                }
+            }
             if (instr["op"] == "const")
             {
                 value.push_back(instr["value"]);
@@ -153,6 +170,10 @@ bool localValueNumbering(json &j)
                 for (auto &a : instr["args"])
                 {
                     string var = a;
+                    if (renamedVars.count(var) && (int)i <= renamedVars[var].first)
+                    {
+                        var = renamedVars[var].second;
+                    }
                     int num = var2num.count(var) ? var2num[var] : -1;
                     value.push_back(num);
                 }
@@ -160,7 +181,12 @@ bool localValueNumbering(json &j)
 
             if (instr["op"] == "id") // copy propagation
             {
+                // std::cout << "Copy propagation " << instr["dest"] << std::endl;
                 string arg = instr["args"][0];
+                if (renamedVars.count(arg) && (int)i <= renamedVars[arg].first)
+                {
+                    arg = renamedVars[arg].second;
+                }
                 string dest = instr["dest"];
                 var2num[dest] = var2num[arg];
                 int tempNum = var2num[arg];
@@ -173,8 +199,9 @@ bool localValueNumbering(json &j)
                     }
                 }
             }
-            else if (table.count(value)) // instruction already exists
+            else if (table.count(value) && instr.count("dest")) // instruction already exists
             {
+                // std::cout << "else if " << instr["op"] << std::endl;
                 int num = table[value].first;
                 string var = table[value].second;
 
@@ -188,6 +215,7 @@ bool localValueNumbering(json &j)
             }
             else
             {
+                // std::cout << "else " << instr["op"] << std::endl;
                 int num = nextNum++;
                 string dest = instr.contains("dest") ? string(instr["dest"]) : "";
                 table[value] = {num, dest};
@@ -198,6 +226,10 @@ bool localValueNumbering(json &j)
                     for (auto &a : instr["args"])
                     {
                         string var = a;
+                        if (renamedVars.count(var) && (int)i <= renamedVars[var].first)
+                        {
+                            var = renamedVars[var].second;
+                        }
                         if (var2num.count(var))
                         {
                             int tempNum = var2num[var];
@@ -263,6 +295,26 @@ bool localValueNumbering(json &j)
     return changed;
 }
 
+std::map<std::string, std::vector<int>> findVarToInstLinees(const json &j)
+{
+    std::map<std::string, std::vector<int>> varToLines;
+    for (const auto &function : j["functions"])
+    {
+        const auto &instrs = function["instrs"];
+        for (size_t i = 0; i < instrs.size(); ++i)
+        {
+            const auto &instr = instrs[i];
+            if (instr.contains("dest"))
+            {
+                std::string destVar = instr["dest"];
+                varToLines[destVar].push_back(i);
+            }
+        }
+    }
+
+    return varToLines;
+}
+
 int main(int argc, char *argv[])
 {
     // std::ifstream f(argv[1]);
@@ -270,10 +322,12 @@ int main(int argc, char *argv[])
     json j;
     std::cin >> j;
 
+    std::map<std::string, std::vector<int>> varToLines = findVarToInstLinees(j);
+
     bool notConverged = true;
     while (notConverged)
     {
-        notConverged = localValueNumbering(j);
+        notConverged = localValueNumbering(j, varToLines);
     }
 
     std::cout << j << std::endl;

@@ -1,0 +1,1 @@
+{"functions":[{"instrs":[{"dest":"x_copy0","op":"const","type":"int","value":1},{"args":["x_copy0"],"dest":"y","op":"id","type":"int"},{"dest":"x","op":"const","type":"int","value":2},{"args":["x_copy0"],"op":"print"}],"name":"main"}]}
