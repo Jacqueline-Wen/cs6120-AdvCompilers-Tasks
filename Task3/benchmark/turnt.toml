@@ -1,0 +1,6 @@
+[envs.dynamic]
+command = "bril2json < {filename} | brili -p {args} 2>&1 | grep total_dyn_inst > {filename}.dynamic"
+
+# Optimized dynamic count
+[envs.opt_dynamic]
+command = "bril2json < {filename} | ./lvn_exec | ./dce_exec | brili -p {args} 2>&1 | grep total_dyn_inst > {filename}.opt_dynamic"

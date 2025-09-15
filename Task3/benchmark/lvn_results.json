@@ -1,0 +1,98 @@
+{
+    "clobber-arg.bril": {
+        "original_lines": 6,
+        "original_dyn_inst": 3,
+        "optimized_lines": 0,
+        "optimized_dyn_inst": null
+    },
+    "clobber-fold.bril": {
+        "original_lines": 21,
+        "original_dyn_inst": 10,
+        "optimized_lines": 4,
+        "optimized_dyn_inst": 2
+    },
+    "clobber.bril": {
+        "original_lines": 21,
+        "original_dyn_inst": 10,
+        "optimized_lines": 4,
+        "optimized_dyn_inst": 2
+    },
+    "commute.bril": {
+        "original_lines": 10,
+        "original_dyn_inst": 6,
+        "optimized_lines": 4,
+        "optimized_dyn_inst": 2
+    },
+    "divide-by-zero.bril": {
+        "original_lines": 7,
+        "original_dyn_inst": null,
+        "optimized_lines": 0,
+        "optimized_dyn_inst": null
+    },
+    "fold-comparisons.bril": {
+        "original_lines": 22,
+        "original_dyn_inst": null,
+        "optimized_lines": 0,
+        "optimized_dyn_inst": null
+    },
+    "idchain-nonlocal.bril": {
+        "original_lines": 10,
+        "original_dyn_inst": 6,
+        "optimized_lines": 0,
+        "optimized_dyn_inst": null
+    },
+    "idchain-prop.bril": {
+        "original_lines": 8,
+        "original_dyn_inst": 5,
+        "optimized_lines": 4,
+        "optimized_dyn_inst": 2
+    },
+    "idchain.bril": {
+        "original_lines": 7,
+        "original_dyn_inst": 5,
+        "optimized_lines": 4,
+        "optimized_dyn_inst": 2
+    },
+    "logical-operators.bril": {
+        "original_lines": 26,
+        "original_dyn_inst": null,
+        "optimized_lines": 0,
+        "optimized_dyn_inst": null
+    },
+    "nonlocal-clobber.bril": {
+        "original_lines": 8,
+        "original_dyn_inst": 4,
+        "optimized_lines": 0,
+        "optimized_dyn_inst": null
+    },
+    "nonlocal.bril": {
+        "original_lines": 10,
+        "original_dyn_inst": 7,
+        "optimized_lines": 0,
+        "optimized_dyn_inst": null
+    },
+    "reassign.bril": {
+        "original_lines": 5,
+        "original_dyn_inst": 3,
+        "optimized_lines": 4,
+        "optimized_dyn_inst": 2
+    },
+    "redundant-dce.bril": {
+        "original_lines": 10,
+        "original_dyn_inst": 6,
+        "optimized_lines": 4,
+        "optimized_dyn_inst": 2
+    },
+    "redundant.bril": {
+        "original_lines": 9,
+        "original_dyn_inst": 6,
+        "optimized_lines": 4,
+        "optimized_dyn_inst": 2
+    },
+    "rename-fold.bril": {
+        "original_lines": 10,
+        "original_dyn_inst": 7,
+        "optimized_lines": 6,
+        "optimized_dyn_inst": 4
+    }
+}
