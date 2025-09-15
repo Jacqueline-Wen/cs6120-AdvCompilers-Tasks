@@ -11,6 +11,6 @@ pipeline = [
 pipeline = [
     "bril2json",
     "./lvn_exec",
-    "./dve_exec",
-    "brili {args}",
+    "./dce_exec",
+    "brili -p {args}",
 ]

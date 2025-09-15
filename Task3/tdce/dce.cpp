@@ -88,6 +88,9 @@ bool removeUnusedVar(json &j)
                     it++;
                 }
             }
+            else {
+                it++;
+            }
         }
     }
     return changed;
