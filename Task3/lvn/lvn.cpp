@@ -1,9 +1,11 @@
-#include <iostream>
+#include "../../utility/seperateBlocks.hpp"
 #include <fstream>
+#include <iostream>
 #include <map>
+#include <nlohmann/json.hpp>
 #include <set>
 #include <vector>
-#include <nlohmann/json.hpp>
+
 
 using json = nlohmann::json;
 using namespace std;
@@ -125,168 +127,145 @@ bool localValueNumbering(json &j, std::map<std::string, std::vector<int>> varToL
     {
         int nextNum = 1;
 
-        auto &instrs = function["instrs"];
-        for (size_t i = 0; i < instrs.size(); ++i)
-        {
-            auto &instr = instrs[i];
+        vector<vector<json>> blocks = splitBlocks(function["instrs"]);
+
+        for (int j = 0; j < blocks.size(); j++) {
+          for (int i = 0; i < blocks[j].size(); ++i) {
+            auto &instr = blocks[j][i];
             // Building the value tuple
             vector<int> value;
-            if (!instr.contains("op"))
-            {
-                continue;
+            if (!instr.contains("op")) {
+              continue;
             }
             string op = instr["op"];
             value.push_back(hash<string>{}(op));
-            if (instr.contains("dest"))
-            {
-                string dest = instr["dest"];
-                for (auto &line : varToLines[dest]) // check if dest is redefined later
-                {
-                    if (line > (int)i)
-                    {
-                        dest = string(instr["dest"]) + "_copy" + to_string(i); // rename dest
-                        renamedVars[string(instr["dest"])] = {line, dest};
-                        instr["dest"] = dest;
-                        break;
-                    }
+            if (instr.contains("dest")) {
+              string dest = instr["dest"];
+              for (auto &line :
+                   varToLines[dest]) // check if dest is redefined later
+              {
+                if (line > (int)i) {
+                  dest = string(instr["dest"]) + "_copy" +
+                         to_string(i); // rename dest
+                  renamedVars[string(instr["dest"])] = {line, dest};
+                  instr["dest"] = dest;
+                  break;
                 }
+              }
             }
-            if (instr["op"] == "const")
-            {
-                value.push_back(instr["value"]);
-                const2var[instr["dest"]] = instr["value"];
+            if (instr["op"] == "const") {
+              value.push_back(instr["value"]);
+              const2var[instr["dest"]] = instr["value"];
             }
 
-            if (instr.contains("args"))
-            {
-                if (commutative_ops.count(op))
-                {
-                    // For commutative ops with two args, sort the arg nums
-                    if (instr["args"][1] < instr["args"][0])
-                    {
-                        std::swap(instr["args"][1], instr["args"][0]);
-                    }
+            if (instr.contains("args")) {
+              if (commutative_ops.count(op)) {
+                // For commutative ops with two args, sort the arg nums
+                if (instr["args"][1] < instr["args"][0]) {
+                  std::swap(instr["args"][1], instr["args"][0]);
                 }
-                for (auto &a : instr["args"])
-                {
-                    string var = a;
-                    if (renamedVars.count(var) && (int)i <= renamedVars[var].first)
-                    {
-                        var = renamedVars[var].second;
-                    }
-                    int num = var2num.count(var) ? var2num[var] : -1;
-                    value.push_back(num);
+              }
+              for (auto &a : instr["args"]) {
+                string var = a;
+                if (renamedVars.count(var) &&
+                    (int)i <= renamedVars[var].first) {
+                  var = renamedVars[var].second;
                 }
+                int num = var2num.count(var) ? var2num[var] : -1;
+                value.push_back(num);
+              }
             }
 
             if (instr["op"] == "id") // copy propagation
             {
-                // std::cout << "Copy propagation " << instr["dest"] << std::endl;
-                string arg = instr["args"][0];
-                if (renamedVars.count(arg) && (int)i <= renamedVars[arg].first)
-                {
-                    arg = renamedVars[arg].second;
+              // std::cout << "Copy propagation " << instr["dest"] << std::endl;
+              string arg = instr["args"][0];
+              if (renamedVars.count(arg) && (int)i <= renamedVars[arg].first) {
+                arg = renamedVars[arg].second;
+              }
+              string dest = instr["dest"];
+              var2num[dest] = var2num[arg];
+              int tempNum = var2num[arg];
+              for (auto &kv : table) {
+                if (kv.second.first == tempNum) {
+                  instr["args"][0] = kv.second.second;
+                  break;
                 }
-                string dest = instr["dest"];
-                var2num[dest] = var2num[arg];
-                int tempNum = var2num[arg];
-                for (auto &kv : table)
-                {
-                    if (kv.second.first == tempNum)
-                    {
-                        instr["args"][0] = kv.second.second;
+              }
+            } else if (table.count(value) &&
+                       instr.count("dest")) // instruction already exists
+            {
+              // std::cout << "else if " << instr["op"] << std::endl;
+              int num = table[value].first;
+              string var = table[value].second;
+
+              instr = {{"op", "id"},
+                       {"args", json::array({var})},
+                       {"dest", instr["dest"]},
+                       {"type", instr["type"]}};
+              var2num[instr["dest"]] = num;
+              changed = true;
+            } else {
+              // std::cout << "else " << instr["op"] << std::endl;
+              int num = nextNum++;
+              string dest = instr.contains("dest") ? string(instr["dest"]) : "";
+              table[value] = {num, dest};
+
+              if (instr.contains("args")) {
+                std::vector<int> argVals;
+                for (auto &a : instr["args"]) {
+                  string var = a;
+                  if (renamedVars.count(var) &&
+                      (int)i <= renamedVars[var].first) {
+                    var = renamedVars[var].second;
+                  }
+                  if (var2num.count(var)) {
+                    int tempNum = var2num[var];
+                    for (auto &kv : table) {
+                      if (kv.second.first == tempNum) {
+                        a = kv.second.second;
+                        if (const2var.count(a)) {
+                          argVals.push_back(const2var[a]);
+                        }
                         break;
+                      }
                     }
+                  }
                 }
-            }
-            else if (table.count(value) && instr.count("dest")) // instruction already exists
-            {
-                // std::cout << "else if " << instr["op"] << std::endl;
-                int num = table[value].first;
-                string var = table[value].second;
-
-                instr = {
-                    {"op", "id"},
-                    {"args", json::array({var})},
-                    {"dest", instr["dest"]},
-                    {"type", instr["type"]}};
-                var2num[instr["dest"]] = num;
-                changed = true;
-            }
-            else
-            {
-                // std::cout << "else " << instr["op"] << std::endl;
-                int num = nextNum++;
-                string dest = instr.contains("dest") ? string(instr["dest"]) : "";
-                table[value] = {num, dest};
-
-                if (instr.contains("args"))
+                if (argVals.size() == instr["args"].size()) // constant folding
                 {
-                    std::vector<int> argVals;
-                    for (auto &a : instr["args"])
-                    {
-                        string var = a;
-                        if (renamedVars.count(var) && (int)i <= renamedVars[var].first)
-                        {
-                            var = renamedVars[var].second;
-                        }
-                        if (var2num.count(var))
-                        {
-                            int tempNum = var2num[var];
-                            for (auto &kv : table)
-                            {
-                                if (kv.second.first == tempNum)
-                                {
-                                    a = kv.second.second;
-                                    if (const2var.count(a))
-                                    {
-                                        argVals.push_back(const2var[a]);
-                                    }
-                                    break;
-                                }
-                            }
-                        }
+                  bool success = true;
+                  if (instr["op"] == "add" || instr["op"] == "sub" ||
+                      instr["op"] == "mul" || instr["op"] == "div") {
+                    int folded = constant_folding_int(op, argVals, success);
+                    if (success) {
+                      instr = {{"op", "const"},
+                               {"value", folded},
+                               {"dest", instr["dest"]},
+                               {"type", instr["type"]}};
+                      var2num[instr["dest"]] = num;
+                      const2var[instr["dest"]] = folded;
+                      changed = true;
                     }
-                    if (argVals.size() == instr["args"].size()) // constant folding
-                    {
-                        bool success = true;
-                        if (instr["op"] == "add" || instr["op"] == "sub" || instr["op"] == "mul" || instr["op"] == "div")
-                        {
-                            int folded = constant_folding_int(op, argVals, success);
-                            if (success)
-                            {
-                                instr = {
-                                    {"op", "const"},
-                                    {"value", folded},
-                                    {"dest", instr["dest"]},
-                                    {"type", instr["type"]}};
-                                var2num[instr["dest"]] = num;
-                                const2var[instr["dest"]] = folded;
-                                changed = true;
-                            }
-                        }
-                        else
-                        {
-                            auto folded = constant_folding_bool(op, argVals, success);
-                            if (success)
-                            {
-                                instr = {
-                                    {"op", "const"},
-                                    {"value", folded},
-                                    {"dest", instr["dest"]},
-                                    {"type", instr["type"]}};
-                                var2num[instr["dest"]] = num;
-                                const2var[instr["dest"]] = folded;
-                                changed = true;
-                            }
-                        }
+                  } else {
+                    auto folded = constant_folding_bool(op, argVals, success);
+                    if (success) {
+                      instr = {{"op", "const"},
+                               {"value", folded},
+                               {"dest", instr["dest"]},
+                               {"type", instr["type"]}};
+                      var2num[instr["dest"]] = num;
+                      const2var[instr["dest"]] = folded;
+                      changed = true;
                     }
+                  }
                 }
-                if (!dest.empty())
-                {
-                    var2num[dest] = num;
-                }
+              }
+              if (!dest.empty()) {
+                var2num[dest] = num;
+              }
             }
+          }
         }
     }
     // printTable(table);
