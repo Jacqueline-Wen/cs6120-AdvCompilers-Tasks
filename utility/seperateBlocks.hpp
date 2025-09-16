@@ -2,6 +2,7 @@
 #include <iostream>
 #include <map>
 #include <nlohmann/json.hpp>
+#include <queue>
 #include <set>
 #include <vector>
 #pragma once
@@ -17,7 +18,7 @@ vector<vector<json>> splitBlocks(json &j) {
   labels.push_back(curLabel);
 
   queue<json> curBlock;
-  for (auto instr : j["instrs"]) {
+  for (auto &instr : j["instrs"]) {
     // end block
     if (!instr["op"].is_null() &&
         (instr["op"] == "br" || instr["op"] == "jmp" || instr["op"] == "ret")) {
