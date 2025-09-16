@@ -129,9 +129,9 @@ bool localValueNumbering(json &j, std::map<std::string, std::vector<int>> varToL
 
         vector<vector<json>> blocks = splitBlocks(function["instrs"]);
 
-        for (int j = 0; j < blocks.size(); j++) {
-          for (int i = 0; i < blocks[j].size(); ++i) {
-            auto &instr = blocks[j][i];
+        for (int m = 0; m < blocks.size(); m++) {
+          for (int i = 0; i < blocks[m].size(); ++i) {
+            auto &instr = blocks[m][i];
             // Building the value tuple
             vector<int> value;
             if (!instr.contains("op")) {
