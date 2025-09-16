@@ -9,11 +9,11 @@ Serena Zhang (syz8), Maggie Gao (mg2447), Jacqueline Wen (jw2347)
 
 For the trivial implementation of dead code elimination, we supported two main functionalities: remove unused variables and remove variables that were reassigned before they were used. 
 
-For removing variables that were unused, I created a map that tracked whether a variable was used, as well as a set that tracked all variables that were created. I then compared the set with the map and removed the unused variables. 
+For removing variables that were unused, we created a map that tracked whether a variable was used, as well as a set that tracked all variables that were created. We then compared the set with the map and removed the unused variables. 
 
-For removing unused variables that were reassigned, I created maps to track when variables were last assigned and last used. If I came across a variable assignment where the variable was previously assigned after it was used, I would remove the variable assignment.
+For removing unused variables that were reassigned, we created maps to track when variables were last assigned and last used. If we came across a variable assignment where the variable was previously assigned after it was used, we would remove the variable assignment.
 
-For testing, I tested my implementation against some basic test casses. 
+For testing, we tested my implementation against some basic test casses. 
 
 **Local Value Numbering**
 
@@ -47,4 +47,4 @@ The hardest part was debugging. Debugging errors that occurred was tricky becaus
 
 **Michelin Star**
 
-We believe our code deserves michelin stars. After wrestling with debugging and fixing various issues, we were able to implement LVN and DCE meticulously in C++. Furthermore, we not only implemented a trivial version of LVN and DCE. We extended our implementation to perform commutative operations, constant folding, and copy propogation.
+We believe our code deserves a michelin star. After wrestling with debugging and fixing various issues, we were able to implement LVN and DCE meticulously in C++. Furthermore, we not only implemented a trivial version of LVN and DCE. We extended our implementation to perform commutative operations, constant folding, and copy propogation.
