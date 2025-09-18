@@ -1,0 +1,1 @@
+command = "g++ dataflowAnalysis.cpp -I/opt/homebrew/include -std=c++17 -o dataflowAnalysis && bril2json < {filename} | dataflowAnalysis"
