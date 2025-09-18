@@ -1,9 +1,9 @@
-#include <iostream>
+#include "../utility/basicBlocks.hpp"
 #include <fstream>
+#include <iostream>
+#include <nlohmann/json.hpp>
 #include <queue>
 #include <set>
-#include <nlohmann/json.hpp>
-#include "../utility/seperateBlocks.hpp"
 
 using namespace std;
 using json = nlohmann::json;
@@ -99,8 +99,11 @@ int main(int argc, char *argv[])
     std::ifstream f(argv[1]);
     json j = json::parse(f);
 
-    map<string, vector<json>> blocks = {};
-    map<string, vector<string>> successors = {};
+    shared_ptr<BasicBlocks> basicBlocks = make_shared<BasicBlocks>(j);
+
+    map<int, vector<json>> blocks = basicBlocks->getBlocks();
+    // basicBlocks->getPredecessors(8)
+    map<int, vector<string>> successors = {};
     map<string, vector<string>> predecessors = {};
     auto [blockIn, blockOut] = reachingDefinitions(blocks, successors, predecessors);
 }

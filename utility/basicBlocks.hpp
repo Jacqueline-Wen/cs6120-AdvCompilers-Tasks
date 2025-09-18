@@ -22,4 +22,4 @@ private:
     map<int, vector<json>> blocks_;
     map<int, string> blockToLabelName_;
     map<string, int> labelNameToBlock_;
-} 
+};

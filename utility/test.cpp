@@ -2,7 +2,7 @@
 #include <fstream>
 #include <set>
 #include <nlohmann/json.hpp>
-#include "seperateBlocks.hpp"
+#include "basicBlocks.hpp"
 
 using namespace std;
 using json = nlohmann::json;
@@ -11,11 +11,11 @@ int main(int argc, char* argv[]) {
     std::ifstream f(argv[1]);
     json j = json::parse(f);
 
-    auto blocks = splitBlocks(j);
+    shared_ptr<BasicBlocks> basicBlocks = make_shared<BasicBlocks>(j);
 
     cout << "finished splitting\n";
 
-    for (auto a: blocks) { // single block
+    for (auto a: basicBlocks->getBlocks()) { // single block
         cout << "for label " << a.first << endl;
         for (auto b: a.second) { // single line
             cout << b.dump(4) << endl;
