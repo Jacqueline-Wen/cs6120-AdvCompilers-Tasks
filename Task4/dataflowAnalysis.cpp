@@ -65,7 +65,7 @@ bool transfer(map<string, vector<int>> blockIn, map<string, vector<int>> blockOu
     return outChanged;
 }
 
-pair<map<string, map<string, vector<int>>>, map<string, map<string, vector<int>>>> reachingDefinitions(map<string, vector<json>> blocks, map<string, string> labelMap, map<string, vector<string>> successors, map<string, vector<string>> predecessors)
+pair<map<string, map<string, vector<int>>>, map<string, map<string, vector<int>>>> reachingDefinitions(map<string, vector<json>> blocks, map<string, vector<string>> successors, map<string, vector<string>> predecessors)
 {
     map<string, map<string, vector<int>>> blockIn;
     map<string, map<string, vector<int>>> blockOut;
@@ -100,8 +100,7 @@ int main(int argc, char *argv[])
     json j = json::parse(f);
 
     map<string, vector<json>> blocks = {};
-    map<string, string> labelMap = {};
     map<string, vector<string>> successors = {};
     map<string, vector<string>> predecessors = {};
-    auto [blockIn, blockOut] = reachingDefinitions(blocks, labelMap, successors, predecessors);
+    auto [blockIn, blockOut] = reachingDefinitions(blocks, successors, predecessors);
 }
