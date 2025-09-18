@@ -20,7 +20,7 @@ map<string, vector<json>> splitBlocks(json &j) {
     for (auto a : j["functions"]) {
         for (auto instr : a["instrs"]) {
             // end block
-            if (!instr["op"].is_null() &&
+            if (instr.contains("op") &&
                 (instr["op"] == "br" || instr["op"] == "jmp" ||
                  instr["op"] == "ret")) {
                 curBlock.push(instr);
@@ -29,7 +29,7 @@ map<string, vector<json>> splitBlocks(json &j) {
                     basic_blocks[curLabel].push_back(curBlock.front());
                     curBlock.pop();
                 }
-            } else if (!instr["label"].is_null()) {
+            } else if (instr.contains("label")) {
                 while (curBlock.size() > 0) {
                     basic_blocks[curLabel].push_back(curBlock.front());
                     curBlock.pop();

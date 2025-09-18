@@ -1,6 +1,19 @@
 #include <iostream>
 #include <fstream>
-using namespace std;
+#include <set>
+#include <nlohmann/json.hpp>
+#include "../utility/seperateBlocks.hpp"
 
-int main(){
+using namespace std;
+using json = nlohmann::json;
+
+void liveVariables() {
+    
+}
+
+int main(int argc, char* argv[]) {
+    std::ifstream f(argv[1]);
+    json j = json::parse(f);
+
+    auto blocks = splitBlocks(j);
 }
