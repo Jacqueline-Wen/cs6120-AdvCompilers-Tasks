@@ -11,9 +11,9 @@ using json = nlohmann::json;
 map<string, vector<int>> merge(vector<string> predecessors, map<string, map<string, vector<int>>> blockOut)
 {
     map<string, vector<int>> merged;
-    for (const auto p : predecessors)
+    for (const auto pred : predecessors)
     {
-        for (const auto def : blockOut[p])
+        for (const auto def : blockOut[pred])
         {
             for (const auto var : def.second)
             {
