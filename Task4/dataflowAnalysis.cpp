@@ -106,5 +106,5 @@ int main(int argc, char *argv[])
     // basicBlocks->getPredecessors(8)
     // map<int, vector<string>> successors = {};
     // map<string, vector<string>> predecessors = {};
-    auto [blockIn, blockOut] = reachingDefinitions(move(basicBlocks));
+    auto [blockIn, blockOut] = reachingDefinitions(std::move(basicBlocks));
 }
