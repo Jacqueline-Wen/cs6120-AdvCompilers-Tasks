@@ -61,7 +61,6 @@ map<string, vector<int>> merge(vector<int> predecessors, map<int, map<string, ve
 
 bool transfer(map<string, vector<int>> blockIn, map<string, vector<int>> &blockOut, vector<json> instrs, int label, int &index)
 {
-    set<string> actionOps = {"const", "add", "sub", "mul", "div", "not", "eq", "ne", "lt", "le", "gt", "ge", "and", "or"};
     map<string, vector<int>> updatedOut = blockIn;
     bool outChanged = false;
     for (const auto instr : instrs)
@@ -81,7 +80,6 @@ bool transfer(map<string, vector<int>> blockIn, map<string, vector<int>> &blockO
                 outChanged = true;
             }
         }
-        // else if (actionOps.count(op))
         else
         {
             updatedOut[dest].clear();
@@ -129,11 +127,6 @@ int main(int argc, char *argv[])
     std::cin >> j;
 
     shared_ptr<BasicBlocks> basicBlocks = make_shared<BasicBlocks>(j);
-
-    // map<int, vector<json>> blocks = basicBlocks->getBlocks();
-    // basicBlocks->getPredecessors(8)
-    // map<int, vector<string>> successors = {};
-    // map<string, vector<string>> predecessors = {};
     auto [blockIn, blockOut] = reachingDefinitions(std::move(basicBlocks));
     printBlockInAndOut(blockIn, blockOut);
 }
