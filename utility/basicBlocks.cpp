@@ -50,7 +50,8 @@ BasicBlocks::BasicBlocks(json &j) {
             successors_[prev].push_back(blockname);
             saveNext = false;
         }
-        if(lastCommand.contains("labels")) {
+        if (lastCommand.contains("labels") ||
+            (lastCommand.contains("op") && lastCommand["op"] == "ret")) {
             for (auto children: lastCommand["labels"]) {
                 int childInt = labelNameToBlock_[children];
                 successors_[blockname].push_back(childInt);

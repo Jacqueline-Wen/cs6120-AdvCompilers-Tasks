@@ -31,4 +31,13 @@ int main(int argc, char* argv[]) {
             cout << b << endl;
         }
     }
+
+    cout << "predecessors\n";
+
+    for (auto a : basicBlocks->getBlocks()) {
+        cout << "label " << a.first << endl;
+        for (auto b : basicBlocks->getPredecessors(a.first)) {
+            cout << b << endl;
+        }
+    }
 }
