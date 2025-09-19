@@ -39,6 +39,24 @@ void printBlockInAndOut(const map<int, map<string, vector<int>>> &blockIn, const
     }
 }
 
+map<json, int> assignInstructionIds(json j)
+{
+    map<json, int> instrToId;
+    int id = 0;
+    for (const auto &function : j["functions"])
+    {
+        const auto &instrs = function["instrs"];
+        for (const auto &instr : function["instrs"])
+        {
+            if (instr.contains("dest"))
+            {
+                instrToId[instr] = id++;
+            }
+        }
+    }
+    return instrToId;
+}
+
 map<string, vector<int>> merge(vector<int> predecessors, map<int, map<string, vector<int>>> blockOut)
 {
     map<string, vector<int>> merged;
@@ -59,7 +77,7 @@ map<string, vector<int>> merge(vector<int> predecessors, map<int, map<string, ve
     return merged;
 }
 
-bool transfer(map<string, vector<int>> blockIn, map<string, vector<int>> &blockOut, vector<json> instrs, int label, int &index)
+bool transfer(map<string, vector<int>> blockIn, map<string, vector<int>> &blockOut, vector<json> instrs, map<json, int> instrToId, int label)
 {
     map<string, vector<int>> updatedOut = blockIn;
     bool outChanged = false;
@@ -75,15 +93,15 @@ bool transfer(map<string, vector<int>> blockIn, map<string, vector<int>> &blockO
         {
             updatedOut[dest].clear();
             updatedOut[dest] = updatedOut[instr["args"][0]];
-            if (updatedOut[dest] != blockOut[dest])
-            {
-                outChanged = true;
-            }
         }
         else
         {
             updatedOut[dest].clear();
-            updatedOut[dest].push_back(index++);
+            updatedOut[dest].push_back(instrToId[instr]);
+            outChanged = true;
+        }
+        if (updatedOut[dest] != blockOut[dest])
+        {
             outChanged = true;
         }
     }
@@ -91,7 +109,7 @@ bool transfer(map<string, vector<int>> blockIn, map<string, vector<int>> &blockO
     return outChanged;
 }
 
-pair<map<int, map<string, vector<int>>>, map<int, map<string, vector<int>>>> reachingDefinitions(shared_ptr<BasicBlocks> basicBlocks)
+pair<map<int, map<string, vector<int>>>, map<int, map<string, vector<int>>>> reachingDefinitions(shared_ptr<BasicBlocks> basicBlocks, map<json, int> instrToId)
 {
     map<int, vector<json>> blocks = basicBlocks->getBlocks();
     map<int, map<string, vector<int>>> blockIn;
@@ -109,7 +127,7 @@ pair<map<int, map<string, vector<int>>>, map<int, map<string, vector<int>>>> rea
         q.pop();
         map<string, vector<int>> updatedIn = merge(basicBlocks->getPredecessors(label), blockOut);
         blockIn[label] = updatedIn;
-        bool outChanged = transfer(blockIn[label], blockOut[label], blocks[label], label, index);
+        bool outChanged = transfer(blockIn[label], blockOut[label], blocks[label], instrToId, label);
         if (outChanged)
         {
             for (const auto succ : basicBlocks->getSuccessors(label))
@@ -117,6 +135,7 @@ pair<map<int, map<string, vector<int>>>, map<int, map<string, vector<int>>>> rea
                 q.push(succ);
             }
         }
+        printBlockInAndOut(blockIn, blockOut);
     }
     return {blockIn, blockOut};
 }
@@ -126,7 +145,9 @@ int main(int argc, char *argv[])
     json j;
     std::cin >> j;
 
+    map<json, int> instrToId = assignInstructionIds(j);
+
     shared_ptr<BasicBlocks> basicBlocks = make_shared<BasicBlocks>(j);
-    auto [blockIn, blockOut] = reachingDefinitions(std::move(basicBlocks));
+    auto [blockIn, blockOut] = reachingDefinitions(std::move(basicBlocks), instrToId);
     printBlockInAndOut(blockIn, blockOut);
 }
