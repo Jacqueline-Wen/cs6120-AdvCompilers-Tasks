@@ -8,7 +8,7 @@
 using namespace std;
 using json = nlohmann::json;
 
-map<string, vector<int>> merge(vector<string> predecessors, map<string, map<string, vector<int>>> blockOut)
+map<string, vector<int>> merge(vector<int> predecessors, map<int, map<string, vector<int>>> blockOut)
 {
     map<string, vector<int>> merged;
     for (const auto pred : predecessors)
@@ -27,7 +27,7 @@ map<string, vector<int>> merge(vector<string> predecessors, map<string, map<stri
     return merged;
 }
 
-bool transfer(map<string, vector<int>> blockIn, map<string, vector<int>> blockOut, vector<json> instrs, string label, int index)
+bool transfer(map<string, vector<int>> blockIn, map<string, vector<int>> blockOut, vector<json> instrs, int label, int index)
 {
     set<string> actionOps = {"add", "sub", "mul", "div", "not", "eq", "ne", "lt", "le", "gt", "ge", "and", "or"};
     bool outChanged = false;
@@ -65,12 +65,13 @@ bool transfer(map<string, vector<int>> blockIn, map<string, vector<int>> blockOu
     return outChanged;
 }
 
-pair<map<string, map<string, vector<int>>>, map<string, map<string, vector<int>>>> reachingDefinitions(map<string, vector<json>> blocks, map<string, vector<string>> successors, map<string, vector<string>> predecessors)
+pair<map<int, map<string, vector<int>>>, map<int, map<string, vector<int>>>> reachingDefinitions(shared_ptr<BasicBlocks> basicBlocks)
 {
-    map<string, map<string, vector<int>>> blockIn;
-    map<string, map<string, vector<int>>> blockOut;
+    map<int, vector<json>> blocks = basicBlocks->getBlocks();
+    map<int, map<string, vector<int>>> blockIn;
+    map<int, map<string, vector<int>>> blockOut;
     int index = 0;
-    queue<string> q;
+    queue<int> q;
     for (const auto a : blocks)
     {
         q.push(a.first);
@@ -78,14 +79,14 @@ pair<map<string, map<string, vector<int>>>, map<string, map<string, vector<int>>
 
     while (q.size() > 0)
     {
-        string label = q.front();
+        int label = q.front();
         q.pop();
-        map<string, vector<int>> updatedIn = merge(predecessors[label], blockOut);
+        map<string, vector<int>> updatedIn = merge(basicBlocks->getPredecessors(label), blockOut);
         blockIn[label] = updatedIn;
         bool outChanged = transfer(blockIn[label], blockOut[label], blocks[label], label, index);
         if (outChanged)
         {
-            for (const auto succ : successors[label])
+            for (const auto succ : basicBlocks->getSuccessors(label))
             {
                 q.push(succ);
             }
@@ -101,9 +102,9 @@ int main(int argc, char *argv[])
 
     shared_ptr<BasicBlocks> basicBlocks = make_shared<BasicBlocks>(j);
 
-    map<int, vector<json>> blocks = basicBlocks->getBlocks();
+    // map<int, vector<json>> blocks = basicBlocks->getBlocks();
     // basicBlocks->getPredecessors(8)
-    map<int, vector<string>> successors = {};
-    map<string, vector<string>> predecessors = {};
-    auto [blockIn, blockOut] = reachingDefinitions(blocks, successors, predecessors);
+    // map<int, vector<string>> successors = {};
+    // map<string, vector<string>> predecessors = {};
+    auto [blockIn, blockOut] = reachingDefinitions(move(basicBlocks));
 }
