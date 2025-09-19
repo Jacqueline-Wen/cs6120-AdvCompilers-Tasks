@@ -8,8 +8,10 @@ using namespace std;
 using json = nlohmann::json;
 
 int main(int argc, char* argv[]) {
-    std::ifstream f(argv[1]);
-    json j = json::parse(f);
+    // std::ifstream f(argv[1]);
+    // json j = json::parse(f);
+    json j;
+    cin >> j;
 
     shared_ptr<BasicBlocks> basicBlocks = make_shared<BasicBlocks>(j);
 
@@ -21,5 +23,12 @@ int main(int argc, char* argv[]) {
             cout << b.dump(4) << endl;
         }
         cout << "______\n";
+    }
+
+    for (auto a : basicBlocks->getBlocks()) {
+        cout << "label " << a.first << endl;
+        for (auto b : basicBlocks->getSuccessors(a.first)) {
+            cout << b << endl;
+        }
     }
 }

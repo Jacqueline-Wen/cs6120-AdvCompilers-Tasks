@@ -102,6 +102,9 @@ int main(int argc, char *argv[])
 
     shared_ptr<BasicBlocks> basicBlocks = make_shared<BasicBlocks>(j);
 
+    cout << "finished parsing json file\n";
+    cout << basicBlocks->getBlocks().size() << endl;
+
     // map<int, vector<json>> blocks = basicBlocks->getBlocks();
     // basicBlocks->getPredecessors(8)
     // map<int, vector<string>> successors = {};

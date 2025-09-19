@@ -48,6 +48,7 @@ BasicBlocks::BasicBlocks(json &j) {
         if (saveNext) {
             predecessors_[blockname].push_back(prev);
             successors_[prev].push_back(blockname);
+            saveNext = false;
         }
         if(lastCommand.contains("labels")) {
             for (auto children: lastCommand["labels"]) {
