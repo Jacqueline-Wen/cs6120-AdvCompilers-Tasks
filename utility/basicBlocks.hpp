@@ -4,14 +4,16 @@
 #include <nlohmann/json.hpp>
 #include <set>
 #include <vector>
+#include <queue>
 #pragma once
 
 using json = nlohmann::json;
 using namespace std;
 
-class BasicBlocks {
+class BasicBlocks
+{
 public:
-    BasicBlocks(json& j);
+    BasicBlocks(json &j);
     map<int, vector<json>> getBlocks();
     vector<int> getPredecessors(int label);
     vector<int> getSuccessors(int label);
