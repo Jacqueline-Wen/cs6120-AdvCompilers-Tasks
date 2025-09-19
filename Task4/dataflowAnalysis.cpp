@@ -85,10 +85,10 @@ bool transfer(map<string, vector<int>> blockIn,
             updatedOut[dest].push_back(instrToId[instr]);
             outChanged = true;
         }
-        if (updatedOut[dest].size() == blockOut[dest].size() &&
-            std::equal(updatedOut[dest].begin(),
-                       updatedOut[dest].begin() + updatedOut[dest].size(),
-                       blockOut[dest].begin())) {
+        if (updatedOut[dest].size() != blockOut[dest].size() ||
+            !std::equal(updatedOut[dest].begin(),
+                        updatedOut[dest].begin() + updatedOut[dest].size(),
+                        blockOut[dest].begin())) {
             outChanged = true;
         }
     }
