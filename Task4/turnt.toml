@@ -1,1 +1,1 @@
-command = "g++ dataflowAnalysis.cpp ../utility/BasicBlocks.cpp -I/opt/homebrew/include -std=c++17 -o dataflowAnalysis && bril2json < {filename} | ./dataflowAnalysis"
+command = "g++ dataflowAnalysis.cpp ../utility/BasicBlocks.cpp -I/opt/homebrew/include -std=c++17 -o dataflowAnalysis && ./dataflowAnalysis {filename}"

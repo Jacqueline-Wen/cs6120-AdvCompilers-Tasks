@@ -8,6 +8,37 @@
 using namespace std;
 using json = nlohmann::json;
 
+void printBlockInAndOut(const map<int, map<string, vector<int>>> &blockIn, const map<int, map<string, vector<int>>> &blockOut)
+{
+    for (const auto &pair : blockIn)
+    {
+        int label = pair.first;
+        map<string, vector<int>> ins = pair.second;
+        map<string, vector<int>> outs = blockOut.at(label);
+        cout << "Block " << label << endl;
+        cout << "  in:" << endl;
+        for (const auto &in : ins)
+        {
+            cout << "    " << in.first << " ";
+            for (const int def : in.second)
+            {
+                cout << def << " ";
+            }
+            cout << endl;
+        }
+        cout << "  out:" << endl;
+        for (const auto &out : outs)
+        {
+            cout << "    " << out.first << " ";
+            for (const int def : out.second)
+            {
+                cout << def << " ";
+            }
+            cout << endl;
+        }
+    }
+}
+
 map<string, vector<int>> merge(vector<int> predecessors, map<int, map<string, vector<int>>> blockOut)
 {
     map<string, vector<int>> merged;
@@ -22,46 +53,43 @@ map<string, vector<int>> merge(vector<int> predecessors, map<int, map<string, ve
                     merged[def.first].push_back(var);
                 }
             }
+            sort(merged[def.first].begin(), merged[def.first].end());
         }
     }
     return merged;
 }
 
-bool transfer(map<string, vector<int>> blockIn, map<string, vector<int>> blockOut, vector<json> instrs, int label, int index)
+bool transfer(map<string, vector<int>> blockIn, map<string, vector<int>> &blockOut, vector<json> instrs, int label, int &index)
 {
-    set<string> actionOps = {"add", "sub", "mul", "div", "not", "eq", "ne", "lt", "le", "gt", "ge", "and", "or"};
+    set<string> actionOps = {"const", "add", "sub", "mul", "div", "not", "eq", "ne", "lt", "le", "gt", "ge", "and", "or"};
+    map<string, vector<int>> updatedOut = blockIn;
     bool outChanged = false;
-    map<string, vector<int>> updatedOut = {};
     for (const auto instr : instrs)
     {
+        if (!instr.contains("op") || !instr.contains("dest"))
+        {
+            continue;
+        }
         string op = instr["op"];
         string dest = instr["dest"];
-        if (op == "const")
+        if (op == "id")
         {
+            updatedOut[dest].clear();
+            updatedOut[dest] = updatedOut[instr["args"][0]];
+            if (updatedOut[dest] != blockOut[dest])
+            {
+                outChanged = true;
+            }
+        }
+        // else if (actionOps.count(op))
+        else
+        {
+            updatedOut[dest].clear();
             updatedOut[dest].push_back(index++);
             outChanged = true;
         }
-        else if (op == "id")
-        {
-            for (const auto &def : blockIn[dest])
-            {
-                updatedOut[dest].push_back(def);
-                if (find(blockOut[dest].begin(), blockOut[dest].end(), def) == blockOut[dest].end())
-                {
-                    outChanged = true;
-                }
-            }
-        }
-        else if (actionOps.count(op))
-        {
-            for (const auto &def : blockIn[dest])
-            {
-                updatedOut[dest].push_back(index++);
-            }
-            outChanged = true;
-        }
     }
-    blockOut = updatedOut;
+    blockOut = std::move(updatedOut);
     return outChanged;
 }
 
@@ -97,8 +125,8 @@ pair<map<int, map<string, vector<int>>>, map<int, map<string, vector<int>>>> rea
 
 int main(int argc, char *argv[])
 {
-    std::ifstream f(argv[1]);
-    json j = json::parse(f);
+    json j;
+    std::cin >> j;
 
     shared_ptr<BasicBlocks> basicBlocks = make_shared<BasicBlocks>(j);
 
@@ -107,4 +135,5 @@ int main(int argc, char *argv[])
     // map<int, vector<string>> successors = {};
     // map<string, vector<string>> predecessors = {};
     auto [blockIn, blockOut] = reachingDefinitions(std::move(basicBlocks));
+    printBlockInAndOut(blockIn, blockOut);
 }
