@@ -6,7 +6,9 @@ Block 1
     axpc 5 
     c 1 
     m 2 
+    max 0 
     next 8 
+    seq 0 
     val 11 
     x 3 
 Block 2
@@ -16,18 +18,24 @@ Block 2
     i 23 
     max 14 
     one 15 
+    rng 0 
+    size 0 
 Block 3
   in:
     arr 12 
     i 23 
     max 14 
     one 15 
+    rng 0 
+    size 0 
   out:
     arr 12 
     cond 24 
     i 23 
     max 14 
     one 15 
+    rng 0 
+    size 0 
 Block 4
   in:
   out:
@@ -50,6 +58,8 @@ Block 7
     arr 22 
     i 23 
     rng 21 
+    seed 0 
+    size 0 
     two 20 
 Block 8
   in:
@@ -57,6 +67,8 @@ Block 8
     i 19 23 
     loc 25 
     rng 21 
+    seed 0 
+    size 0 
     two 20 
     val 17 
   out:
@@ -65,6 +77,8 @@ Block 8
     i 19 23 
     loc 25 
     rng 21 
+    seed 0 
+    size 0 
     two 20 
     val 17 
 Block 9
@@ -75,7 +89,9 @@ Block 9
     loc 25 
     max 14 
     one 15 
-    rng 21 
+    rng 0 21 
+    seed 0 
+    size 0 
     two 20 
     val 17 
   out:
@@ -85,7 +101,9 @@ Block 9
     loc 25 
     max 14 
     one 15 
-    rng 21 
+    rng 0 21 
+    seed 0 
+    size 0 
     two 20 
     val 27 
 Block 10
@@ -96,7 +114,9 @@ Block 10
     loc 25 
     max 14 
     one 15 
-    rng 21 
+    rng 0 21 
+    seed 0 
+    size 0 
     two 20 
     val 17 27 
   out:
@@ -106,6 +126,8 @@ Block 10
     loc 25 
     max 14 
     one 15 
-    rng 21 
+    rng 0 21 
+    seed 0 
+    size 0 
     two 20 
     val 17 27 

@@ -6,6 +6,16 @@ BasicBlocks::BasicBlocks(json &j) {
 
     queue<json> curBlock;
     for (auto a : j["functions"]) {
+        if (a.contains("args")){
+            for(auto arg: a["args"]){
+                json instr;
+                instr["dest"] = arg["name"];
+                instr["type"] = arg["type"];
+                instr["op"] = "arg";
+                curBlock.push(instr);
+            }
+        }
+
         for (auto instr : a["instrs"]) {
             // end block
             if (instr.contains("op") &&

@@ -2,38 +2,52 @@ Block 1
   in:
   out:
     cond_m 2 
+    m 0 
+    n 0 
     one 1 
     zero 0 
 Block 2
   in:
     cond_m 2 
+    m 0 
+    n 0 
     one 1 
     zero 0 
   out:
     cond_m 2 
+    m 0 
+    n 0 
     one 1 
     tmp 3 
     zero 0 
 Block 3
   in:
     cond_m 2 
+    m 0 
+    n 0 
     one 1 
     zero 0 
   out:
     cond_m 2 
     cond_n 4 
+    m 0 
+    n 0 
     one 1 
     zero 0 
 Block 4
   in:
     cond_m 2 
     cond_n 4 
+    m 0 
+    n 0 
     one 1 
     zero 0 
   out:
     cond_m 2 
     cond_n 4 
+    m 0 
     m1 7 
+    n 0 
     one 1 
     tmp 6 
     zero 0 
@@ -41,12 +55,16 @@ Block 5
   in:
     cond_m 2 
     cond_n 4 
+    m 0 
+    n 0 
     one 1 
     zero 0 
   out:
     cond_m 2 
     cond_n 4 
+    m 0 
     m1 7 
+    n 0 
     n1 8 
     one 1 
     t1 9 
@@ -55,4 +73,6 @@ Block 5
 Block 6
   in:
   out:
+    m 0 
+    n 0 
     tmp 11 
