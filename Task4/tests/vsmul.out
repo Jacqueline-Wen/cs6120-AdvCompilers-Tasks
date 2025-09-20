@@ -1,0 +1,111 @@
+Block 1
+  in:
+  out:
+    a 0 
+    ax 4 
+    axpc 5 
+    c 1 
+    m 2 
+    next 8 
+    val 11 
+    x 3 
+Block 2
+  in:
+  out:
+    arr 12 
+    i 23 
+    max 14 
+    one 15 
+Block 3
+  in:
+    arr 12 
+    i 23 
+    max 14 
+    one 15 
+  out:
+    arr 12 
+    cond 24 
+    i 23 
+    max 14 
+    one 15 
+Block 4
+  in:
+  out:
+    loc 25 
+    val 17 
+Block 5
+  in:
+    loc 25 
+    val 17 
+  out:
+    i 19 
+    loc 25 
+    val 17 
+Block 6
+  in:
+  out:
+Block 7
+  in:
+  out:
+    arr 22 
+    i 23 
+    rng 21 
+    two 20 
+Block 8
+  in:
+    arr 22 
+    i 19 23 
+    loc 25 
+    rng 21 
+    two 20 
+    val 17 
+  out:
+    arr 22 
+    cond 24 
+    i 19 23 
+    loc 25 
+    rng 21 
+    two 20 
+    val 17 
+Block 9
+  in:
+    arr 12 22 
+    cond 24 
+    i 19 23 
+    loc 25 
+    max 14 
+    one 15 
+    rng 21 
+    two 20 
+    val 17 
+  out:
+    arr 12 22 
+    cond 24 
+    i 19 23 
+    loc 25 
+    max 14 
+    one 15 
+    rng 21 
+    two 20 
+    val 27 
+Block 10
+  in:
+    arr 12 22 
+    cond 24 
+    i 19 23 
+    loc 25 
+    max 14 
+    one 15 
+    rng 21 
+    two 20 
+    val 17 27 
+  out:
+    arr 12 22 
+    cond 24 
+    i 19 23 
+    loc 25 
+    max 14 
+    one 15 
+    rng 21 
+    two 20 
+    val 17 27 

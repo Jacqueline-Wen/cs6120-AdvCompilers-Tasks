@@ -50,13 +50,15 @@ BasicBlocks::BasicBlocks(json &j) {
             successors_[prev].push_back(blockname);
             saveNext = false;
         }
-        if (lastCommand.contains("labels") ||
-            (lastCommand.contains("op") && lastCommand["op"] == "ret")) {
-            for (auto children: lastCommand["labels"]) {
-                int childInt = labelNameToBlock_[children];
+        if (lastCommand.contains("op") && (lastCommand["op"] == "br" || lastCommand["op"] == "jmp")) {
+            for (auto child : lastCommand["labels"]) {
+                int childInt = labelNameToBlock_[child];
                 successors_[blockname].push_back(childInt);
                 predecessors_[childInt].push_back(blockname);
             }
+        }
+        else if (lastCommand.contains("op") && lastCommand["op"] == "ret") {
+            //no successors
         } else {
             saveNext = true;
             prev = blockname;

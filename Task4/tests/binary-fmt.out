@@ -1,0 +1,29 @@
+Block 1
+  in:
+  out:
+    cond 1 
+    zero 0 
+Block 2
+  in:
+    cond 1 
+    zero 0 
+  out:
+    cond 1 
+    two 2 
+    v0 3 
+    v1 4 
+    zero 0 
+Block 3
+  in:
+    cond 1 
+    two 2 
+    v0 3 
+    v1 4 
+    zero 0 
+  out:
+    cond 1 
+    two 2 
+    v0 5 
+    v1 6 
+    v2 7 
+    zero 0 

@@ -1,0 +1,71 @@
+Block 1
+  in:
+  out:
+    acc 0 
+    half 3 
+    reconstruct 4 
+    same 5 
+    two 8 
+    y 1 
+Block 2
+  in:
+  out:
+    cond0 9 
+    one 7 
+    two 8 
+    zero 6 
+Block 3
+  in:
+    cond0 9 
+    one 7 
+    two 8 
+    zero 6 
+  out:
+    cond0 9 
+    one 7 
+    two 8 
+    zero 6 
+Block 4
+  in:
+    cond0 9 
+    one 7 
+    two 8 
+    zero 6 
+  out:
+    cond0 9 
+    is_even 10 
+    one 7 
+    two 8 
+    zero 6 
+Block 5
+  in:
+    cond0 9 
+    is_even 10 
+    one 7 
+    two 8 
+    zero 6 
+  out:
+    cond0 9 
+    is_even 10 
+    n2 12 
+    one 7 
+    two 8 
+    val 13 
+    x2 11 
+    zero 6 
+Block 6
+  in:
+    cond0 9 
+    is_even 10 
+    one 7 
+    two 8 
+    zero 6 
+  out:
+    acc2 15 
+    cond0 9 
+    is_even 10 
+    n2 14 
+    one 7 
+    two 8 
+    val 16 
+    zero 6 

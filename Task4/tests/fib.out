@@ -1,0 +1,99 @@
+Block 1
+  in:
+  out:
+    i 5 
+    i_minus_one 6 
+    i_minus_two 7 
+    neg_one 2 
+    one 1 
+    vals 3 
+    vals_i 4 
+    zero 0 
+Block 2
+  in:
+    cond 8 
+    i 5 15 
+    i_minus_one 6 16 
+    i_minus_two 7 17 
+    neg_one 2 
+    one 1 
+    tmp 14 
+    tmp2 13 
+    vals 3 
+    vals_i 4 9 
+    vals_i_minus_one 10 
+    vals_i_minus_two 11 
+    zero 0 
+  out:
+    cond 8 
+    i 5 15 
+    i_minus_one 6 16 
+    i_minus_two 7 17 
+    neg_one 2 
+    one 1 
+    tmp 14 
+    tmp2 13 
+    vals 3 
+    vals_i 4 9 
+    vals_i_minus_one 10 
+    vals_i_minus_two 11 
+    zero 0 
+Block 3
+  in:
+    cond 8 
+    i 5 15 
+    i_minus_one 6 16 
+    i_minus_two 7 17 
+    neg_one 2 
+    one 1 
+    tmp 14 
+    tmp2 13 
+    vals 3 
+    vals_i 4 9 
+    vals_i_minus_one 10 
+    vals_i_minus_two 11 
+    zero 0 
+  out:
+    cond 8 
+    i 15 
+    i_minus_one 16 
+    i_minus_two 17 
+    neg_one 2 
+    one 1 
+    tmp 14 
+    tmp2 13 
+    vals 3 
+    vals_i 9 
+    vals_i_minus_one 10 
+    vals_i_minus_two 11 
+    zero 0 
+Block 4
+  in:
+    cond 8 
+    i 5 15 
+    i_minus_one 6 16 
+    i_minus_two 7 17 
+    neg_one 2 
+    one 1 
+    tmp 14 
+    tmp2 13 
+    vals 3 
+    vals_i 4 9 
+    vals_i_minus_one 10 
+    vals_i_minus_two 11 
+    zero 0 
+  out:
+    cond 8 
+    i 5 15 
+    i_minus_one 6 16 
+    i_minus_two 7 17 
+    last 18 
+    neg_one 2 
+    one 1 
+    tmp 19 
+    tmp2 13 
+    vals 3 
+    vals_i 4 9 
+    vals_i_minus_one 10 
+    vals_i_minus_two 11 
+    zero 0 
