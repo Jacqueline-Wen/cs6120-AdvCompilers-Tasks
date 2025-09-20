@@ -14,3 +14,7 @@ For this assignment, we tested by visually inspecting and logically verifying th
 
 ##### Hardest Part
 The hardest part of this assignment was being able to implement the dataflow logic cleanly in C++ without having the convenience of high-level set operations. The algorithm requres frequent unions and replacements, which would have been pretty straightforward with sets. Instead, we had to carefully manage these operations with vectors and maps.
+
+##### Michelin Star
+We believe we deserve a michelin star because our implementation is correct, robust, and well-tested. We handled the complexity of dataflow analysis in C++ and validated our work across an array of diverse benchmarks.
+
