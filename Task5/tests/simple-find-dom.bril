@@ -1,0 +1,27 @@
+@main {
+    i: int = const 0;
+    jmp .loop;
+
+.loop:
+    limit: int = const 10;
+    cond: bool = lt i limit;
+    br cond .body .exit;
+
+.body:
+    threshold: int = const 5;
+    is_small: bool = lt i threshold;
+    br is_small .then .endif;
+
+.then:
+    small_add: int = const 1;
+    i: int = add i small_add;
+    jmp .endif;
+
+.endif:
+    increment: int = const 1;
+    i: int = add i increment;
+    jmp .loop;
+
+.exit:
+    print i;
+}

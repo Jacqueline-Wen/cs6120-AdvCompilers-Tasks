@@ -1,0 +1,1 @@
+command = "g++ dominator.cpp ../utility/BasicBlocks.cpp -I/opt/homebrew/include -std=c++17 -o dominator && bril2json < {filename} | ./dominator"
