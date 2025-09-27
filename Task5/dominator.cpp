@@ -2,45 +2,38 @@
 #include <algorithm>
 #include <fstream>
 #include <iostream>
+#include <map>
 #include <nlohmann/json.hpp>
 #include <set>
-#include <map>
 
 using namespace std;
 using json = nlohmann::json;
 
-void printDominators(const map<int, set<int>> &dom)
-{
-    for (const auto &pair : dom)
-    {
+void printDominators(const map<int, set<int>> &dom) {
+    for (const auto &pair : dom) {
         int blockLabel = pair.first;
         cout << "Block " << blockLabel << " is dominated by: ";
-        for (int dominator : pair.second)
-        {
+        for (int dominator : pair.second) {
             cout << dominator << " ";
         }
         cout << endl;
     }
 }
 
-map<int, set<int>> findDominators(shared_ptr<BasicBlocks> basicBlocks)
-{
+map<int, set<int>> findDominators(shared_ptr<BasicBlocks> basicBlocks) {
     auto blocks = basicBlocks->getBlocks();
     map<int, set<int>> dom;
-    if (blocks.empty())
-    {
+    if (blocks.empty()) {
         return dom;
     }
     int entry = blocks.begin()->first;
 
     // dom = {every block -> all blocks}
     set<int> allBlocks;
-    for (const auto &block : blocks)
-    {
+    for (const auto &block : blocks) {
         allBlocks.insert(block.first);
     }
-    for (const auto &block : blocks)
-    {
+    for (const auto &block : blocks) {
         int blockLabel = block.first;
         dom[blockLabel] = allBlocks;
     }
@@ -48,14 +41,11 @@ map<int, set<int>> findDominators(shared_ptr<BasicBlocks> basicBlocks)
     // dom[entry] = {entry}
     dom[entry] = {entry};
     bool changed = true;
-    while (changed)
-    {
+    while (changed) {
         changed = false;
-        for (const auto &block : blocks)
-        {
+        for (const auto &block : blocks) {
             int blockLabel = block.first;
-            if (blockLabel == entry)
-            {
+            if (blockLabel == entry) {
                 continue;
             }
 
@@ -63,17 +53,13 @@ map<int, set<int>> findDominators(shared_ptr<BasicBlocks> basicBlocks)
             set<int> oldDom = dom[blockLabel];
             vector<int> preds = basicBlocks->getPredecessors(blockLabel);
             set<int> newDom;
-            if (!preds.empty())
-            {
+            if (!preds.empty()) {
                 newDom = dom[preds[0]];
-                for (size_t i = 1; i < preds.size(); i++)
-                {
+                for (size_t i = 1; i < preds.size(); i++) {
                     set<int> temp;
                     int pred = preds[i];
-                    for (int d : dom[pred])
-                    {
-                        if (newDom.find(d) != newDom.end())
-                        {
+                    for (int d : dom[pred]) {
+                        if (newDom.find(d) != newDom.end()) {
                             temp.insert(d);
                         }
                     }
@@ -81,8 +67,7 @@ map<int, set<int>> findDominators(shared_ptr<BasicBlocks> basicBlocks)
                 }
             }
             newDom.insert(blockLabel);
-            if (newDom != oldDom)
-            {
+            if (newDom != oldDom) {
                 dom[blockLabel] = newDom;
                 changed = true;
             }
@@ -91,8 +76,7 @@ map<int, set<int>> findDominators(shared_ptr<BasicBlocks> basicBlocks)
     return dom;
 }
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     json j;
     cin >> j;
 
