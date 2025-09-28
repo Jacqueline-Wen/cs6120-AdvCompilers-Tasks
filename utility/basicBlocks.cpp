@@ -25,6 +25,7 @@ BasicBlocks::BasicBlocks(json &j)
             mainLabel_ = curLabel;
         }
 
+        funcStartLabels.insert(curLabel);
         blockToLabelName_[curLabel] = a["name"];
         labelNameToBlock_[a["name"]] = curLabel;
         funcStartLabels.insert(curLabel);
@@ -57,8 +58,8 @@ BasicBlocks::BasicBlocks(json &j)
                     curLabel++;
                     curBlock.push(instr);
                 }
-                blockToLabelName_[curLabel] = instr["label"];
-                labelNameToBlock_[instr["label"]] = curLabel;
+                blockToLabelName_[curLabel] = to_string(*(--funcStartLabels.upper_bound(curLabel))) + string(instr["label"]);
+                labelNameToBlock_[to_string(*(--funcStartLabels.upper_bound(curLabel))) + string(instr["label"])] = curLabel;
             }
             else
             {
@@ -96,7 +97,7 @@ BasicBlocks::BasicBlocks(json &j)
             {
                 for (auto child : instr["labels"])
                 {
-                    int childInt = labelNameToBlock_[child];
+                    int childInt = labelNameToBlock_[to_string(*(--funcStartLabels.upper_bound(blockname))) + string(child)];
                     successors_[blockname].push_back(childInt);
                     predecessors_[childInt].push_back(blockname);
                 }
