@@ -17,6 +17,7 @@ public:
     map<int, vector<json>> getBlocks();
     vector<int> getPredecessors(int label);
     vector<int> getSuccessors(int label);
+    int getMainLabel();
 
 private:
     map<int, vector<int>> predecessors_;
@@ -24,4 +25,5 @@ private:
     map<int, vector<json>> blocks_;
     map<int, string> blockToLabelName_;
     map<string, int> labelNameToBlock_;
+    int mainLabel_;
 };

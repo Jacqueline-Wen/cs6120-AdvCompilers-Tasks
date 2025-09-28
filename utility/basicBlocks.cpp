@@ -20,6 +20,10 @@ BasicBlocks::BasicBlocks(json &j)
                 curBlock.push(instr);
             }
         }
+        if (a["name"] == "main")
+        {
+            mainLabel_ = curLabel;
+        }
 
         blockToLabelName_[curLabel] = a["name"];
         labelNameToBlock_[a["name"]] = curLabel;
@@ -138,4 +142,9 @@ vector<int> BasicBlocks::getPredecessors(int label)
 vector<int> BasicBlocks::getSuccessors(int label)
 {
     return successors_[label];
+}
+
+int BasicBlocks::getMainLabel()
+{
+    return mainLabel_;
 }
