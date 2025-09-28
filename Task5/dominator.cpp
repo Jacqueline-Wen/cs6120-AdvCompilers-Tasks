@@ -20,6 +20,30 @@ void printDominators(const map<int, set<int>> &dom) {
     }
 }
 
+void findDominanceFrontier(const map<int, set<int>> &dom) {
+    // TODO
+}
+
+map<int, set<int>> findImmediateDominators(const map<int, set<int>> &dom) {
+    map<int, set<int>> immediateDominators = dom;
+    for (auto &node : immediateDominators) {
+        set<int> successorsSuccessors;
+        for (auto &successor : node.second) {
+            if (successor == node.first)
+                continue;
+            for (auto ss : dom.at(successor)) {
+                if (ss != successor)
+                    successorsSuccessors.insert(ss);
+            }
+        }
+        successorsSuccessors.insert(node.first);
+        for (auto a : successorsSuccessors) {
+            immediateDominators[node.first].erase(a);
+        }
+    }
+    return immediateDominators;
+}
+
 map<int, set<int>> findDominators(shared_ptr<BasicBlocks> basicBlocks) {
     auto blocks = basicBlocks->getBlocks();
     map<int, set<int>> dom;
@@ -83,4 +107,9 @@ int main(int argc, char *argv[]) {
     shared_ptr<BasicBlocks> basicBlocks = make_shared<BasicBlocks>(j);
     map<int, set<int>> dominators = findDominators(basicBlocks);
     printDominators(dominators);
+
+    map<int, set<int>> immediateDominators =
+        findImmediateDominators(dominators);
+    cout << "\nprinting immediate dominators\n";
+    printDominators(immediateDominators);
 }
