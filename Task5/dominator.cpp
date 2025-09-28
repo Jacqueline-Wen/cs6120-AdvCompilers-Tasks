@@ -104,7 +104,7 @@ map<int, set<int>> findDominators(shared_ptr<BasicBlocks> basicBlocks)
     {
         return dom;
     }
-    int entry = blocks.begin()->first;
+    int entry = basicBlocks->getMainLabel();
 
     // dom = {every block -> all blocks}
     set<int> allBlocks;
