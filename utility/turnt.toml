@@ -1,0 +1,1 @@
+command = "g++ test.cpp BasicBlocks.cpp -I/opt/homebrew/include -std=c++17 -o test && bril2json < {filename} | ./test"
