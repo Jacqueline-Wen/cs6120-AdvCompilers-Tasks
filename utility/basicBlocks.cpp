@@ -1,18 +1,14 @@
 #include "basicBlocks.hpp"
 
-BasicBlocks::BasicBlocks(json &j)
-{
+BasicBlocks::BasicBlocks(json &j) {
     // creating basic blocks
     int curLabel = 1;
 
     set<int> funcStartLabels;
-    for (auto a : j["functions"])
-    {
+    for (auto a : j["functions"]) {
         queue<json> curBlock;
-        if (a.contains("args"))
-        {
-            for (auto arg : a["args"])
-            {
+        if (a.contains("args")) {
+            for (auto arg : a["args"]) {
                 json instr;
                 instr["dest"] = arg["name"];
                 instr["type"] = arg["type"];
@@ -20,8 +16,7 @@ BasicBlocks::BasicBlocks(json &j)
                 curBlock.push(instr);
             }
         }
-        if (a["name"] == "main")
-        {
+        if (a["name"] == "main") {
             mainLabel_ = curLabel;
         }
 
@@ -30,48 +25,41 @@ BasicBlocks::BasicBlocks(json &j)
         labelNameToBlock_[a["name"]] = curLabel;
         funcStartLabels.insert(curLabel);
 
-        for (auto instr : a["instrs"])
-        {
+        for (auto instr : a["instrs"]) {
             // end block
             if (instr.contains("op") &&
                 (instr["op"] == "br" || instr["op"] == "jmp" ||
-                 instr["op"] == "ret"))
-            {
+                 instr["op"] == "ret")) {
                 curBlock.push(instr);
 
-                while (curBlock.size() > 0)
-                {
+                while (curBlock.size() > 0) {
                     blocks_[curLabel].push_back(curBlock.front());
                     curBlock.pop();
                 }
                 curLabel++;
-            }
-            else if (instr.contains("label"))
-            {
-                if (curBlock.size() > 0)
-                {
-                    while (curBlock.size() > 0)
-                    {
+            } else if (instr.contains("label")) {
+                if (curBlock.size() > 0) {
+                    while (curBlock.size() > 0) {
                         blocks_[curLabel].push_back(curBlock.front());
                         curBlock.pop();
                     }
                     curLabel++;
                     curBlock.push(instr);
                 }
-                blockToLabelName_[curLabel] = to_string(*(--funcStartLabels.upper_bound(curLabel))) + string(instr["label"]);
-                labelNameToBlock_[to_string(*(--funcStartLabels.upper_bound(curLabel))) + string(instr["label"])] = curLabel;
-            }
-            else
-            {
+                blockToLabelName_[curLabel] =
+                    to_string(*(--funcStartLabels.upper_bound(curLabel))) +
+                    string(instr["label"]);
+                labelNameToBlock_[to_string(*(--funcStartLabels.upper_bound(
+                                      curLabel))) +
+                                  string(instr["label"])] = curLabel;
+            } else {
                 curBlock.push(instr);
             }
         }
-        if (curBlock.size() == 0)
-        {
+        if (curBlock.size() == 0) {
             continue;
         }
-        while (curBlock.size() > 0)
-        {
+        while (curBlock.size() > 0) {
             blocks_[curLabel].push_back(curBlock.front());
             curBlock.pop();
         }
@@ -81,48 +69,43 @@ BasicBlocks::BasicBlocks(json &j)
     // populating links
     bool saveNext = false;
     int prev = -1;
-    for (auto a : blocks_)
-    {
+    for (auto a : blocks_) {
         int blockname = a.first;
         auto instrs = a.second;
-        if (saveNext && funcStartLabels.find(blockname) == funcStartLabels.end())
-        {
+        if (saveNext &&
+            funcStartLabels.find(blockname) == funcStartLabels.end()) {
             predecessors_[blockname].push_back(prev);
             successors_[prev].push_back(blockname);
             saveNext = false;
         }
-        for (auto instr : instrs)
-        {
-            if (instr.contains("op") && (instr["op"] == "br" || instr["op"] == "jmp"))
-            {
-                for (auto child : instr["labels"])
-                {
-                    int childInt = labelNameToBlock_[to_string(*(--funcStartLabels.upper_bound(blockname))) + string(child)];
+        for (auto instr : instrs) {
+            if (instr.contains("op") &&
+                (instr["op"] == "br" || instr["op"] == "jmp")) {
+                for (auto child : instr["labels"]) {
+                    int childInt =
+                        labelNameToBlock_[to_string(
+                                              *(--funcStartLabels.upper_bound(
+                                                  blockname))) +
+                                          string(child)];
                     successors_[blockname].push_back(childInt);
                     predecessors_[childInt].push_back(blockname);
                 }
                 saveNext = false;
                 break;
-            }
-            else if (instr.contains("op") && (instr["op"] == "call"))
-            {
-                for (auto child : instr["funcs"])
-                {
+            } else if (instr.contains("op") && (instr["op"] == "call")) {
+                for (auto child : instr["funcs"]) {
                     int childInt = labelNameToBlock_[child];
-                    if (find(successors_[blockname].begin(), successors_[blockname].end(), childInt) == successors_[blockname].end())
-                    {
+                    if (find(successors_[blockname].begin(),
+                             successors_[blockname].end(),
+                             childInt) == successors_[blockname].end()) {
                         successors_[blockname].push_back(childInt);
                         predecessors_[childInt].push_back(blockname);
                     }
                 }
                 saveNext = true;
-            }
-            else if (instr.contains("op") && instr["op"] == "ret")
-            {
+            } else if (instr.contains("op") && instr["op"] == "ret") {
                 saveNext = false;
-            }
-            else
-            {
+            } else {
                 saveNext = true;
                 prev = blockname;
             }
@@ -130,22 +113,12 @@ BasicBlocks::BasicBlocks(json &j)
     }
 }
 
-map<int, vector<json>> BasicBlocks::getBlocks()
-{
-    return blocks_;
-}
+map<int, vector<json>> BasicBlocks::getBlocks() { return blocks_; }
 
-vector<int> BasicBlocks::getPredecessors(int label)
-{
+vector<int> BasicBlocks::getPredecessors(int label) {
     return predecessors_[label];
 }
 
-vector<int> BasicBlocks::getSuccessors(int label)
-{
-    return successors_[label];
-}
+vector<int> BasicBlocks::getSuccessors(int label) { return successors_[label]; }
 
-int BasicBlocks::getMainLabel()
-{
-    return mainLabel_;
-}
+int BasicBlocks::getMainLabel() { return mainLabel_; }
