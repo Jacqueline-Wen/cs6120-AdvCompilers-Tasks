@@ -15,5 +15,6 @@ The function for finding the dominance frontier (`findDominanceFrontier`) involv
 ### Testing
 
 ### Hardest Part
+The hardest part of the assignment was not the coding itself, but the process of carefully reviewing the test results. To make sure our implementation was correct, this involved manually laying out the basic blocks, drawing the control-flow graph, and tracking all the connections. Manually checking dominators, immediate dominators, and dominance frontiers required meticulous detail, as one small mistake could throw off all later computations.
 
 ### Michelin Star
