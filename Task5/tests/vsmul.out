@@ -1,0 +1,35 @@
+printing dominators
+Block 1 is dominated by: 1 2 3 4 7 
+Block 2 is dominated by: 2 7 
+Block 3 is dominated by: 2 3 7 
+Block 4 is dominated by: 2 3 4 7 
+Block 5 is dominated by: 2 3 4 5 7 
+Block 6 is dominated by: 2 3 6 7 
+Block 7 is dominated by: 7 
+Block 8 is dominated by: 7 8 
+Block 9 is dominated by: 7 8 9 
+Block 10 is dominated by: 7 8 10 
+
+printing immediate dominators
+Block 1 is dominated by: 4 
+Block 2 is dominated by: 7 
+Block 3 is dominated by: 2 
+Block 4 is dominated by: 3 
+Block 5 is dominated by: 4 
+Block 6 is dominated by: 3 
+Block 7 is dominated by: 
+Block 8 is dominated by: 7 
+Block 9 is dominated by: 8 
+Block 10 is dominated by: 8 
+
+printing dominance frontier
+Block 1 dominance frontier: 
+Block 2 dominance frontier: 
+Block 3 dominance frontier: 
+Block 4 dominance frontier: 3 
+Block 5 dominance frontier: 3 
+Block 6 dominance frontier: 
+Block 7 dominance frontier: 
+Block 8 dominance frontier: 
+Block 9 dominance frontier: 10 
+Block 10 dominance frontier: 
