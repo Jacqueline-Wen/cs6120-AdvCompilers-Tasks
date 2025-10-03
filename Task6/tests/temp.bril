@@ -1,0 +1,14 @@
+@main(m: bool) {
+  a: int = const 3;
+  br m .left .right;
+.left:
+  a: int = add a a;
+  br m .end1 .end2;
+.right:
+  a: int = mul a a;
+  br m .end1 .end2;
+.end1:
+  print a;
+.end2:
+  print a;
+}

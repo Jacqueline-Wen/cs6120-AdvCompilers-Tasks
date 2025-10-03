@@ -1,0 +1,128 @@
+Converting to SSA...
+
+Printing dominance frontier:
+Block 1 dominance frontier: 
+Block 2 dominance frontier: 4 5 
+Block 3 dominance frontier: 4 5 
+Block 4 dominance frontier: 5 
+Block 5 dominance frontier: 
+SSA conversion complete!
+
+=== SSA Form ===
+Block 1:
+  "arg" "m_2"
+  "const" "a_3"
+  "br" "m_2"
+Block 2:
+  "add" "a_4" "a_3", "a_3"
+  "br" "m_2"
+Block 3:
+  "mul" "a_5" "a_3", "a_3"
+  "br" "m_2"
+Block 4:
+  "a_0" = phi "a_4" 2 "a_5" 3 
+  "print" "a_0"
+Block 5:
+  "a_1" = phi "a_4" 2 "a_5" 3 "a_0" 4 
+  "print" "a_1"
+
+=== SSA JSON ===
+[
+  {
+    "dest": "m_2",
+    "op": "arg",
+    "type": "bool"
+  },
+  {
+    "dest": "a_3",
+    "op": "const",
+    "type": "int",
+    "value": 3
+  },
+  {
+    "args": [
+      "m_2"
+    ],
+    "labels": [
+      "left",
+      "right"
+    ],
+    "op": "br"
+  },
+  {
+    "args": [
+      "a_3",
+      "a_3"
+    ],
+    "dest": "a_4",
+    "op": "add",
+    "type": "int"
+  },
+  {
+    "args": [
+      "m_2"
+    ],
+    "labels": [
+      "end1",
+      "end2"
+    ],
+    "op": "br"
+  },
+  {
+    "args": [
+      "a_3",
+      "a_3"
+    ],
+    "dest": "a_5",
+    "op": "mul",
+    "type": "int"
+  },
+  {
+    "args": [
+      "m_2"
+    ],
+    "labels": [
+      "end1",
+      "end2"
+    ],
+    "op": "br"
+  },
+  {
+    "args": [
+      "a_4",
+      "a_5"
+    ],
+    "dest": "a_0",
+    "labels": [
+      2,
+      3
+    ],
+    "op": "phi"
+  },
+  {
+    "args": [
+      "a_0"
+    ],
+    "op": "print"
+  },
+  {
+    "args": [
+      "a_4",
+      "a_5",
+      "a_0"
+    ],
+    "dest": "a_1",
+    "labels": [
+      2,
+      3,
+      4
+    ],
+    "op": "phi"
+  },
+  {
+    "args": [
+      "a_1"
+    ],
+    "op": "print"
+  }
+]
