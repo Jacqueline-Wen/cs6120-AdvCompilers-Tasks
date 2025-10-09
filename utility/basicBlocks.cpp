@@ -7,15 +7,15 @@ BasicBlocks::BasicBlocks(json &j) {
     set<int> funcStartLabels;
     for (auto a : j["functions"]) {
         queue<json> curBlock;
-        if (a.contains("args")) {
-            for (auto arg : a["args"]) {
-                json instr;
-                instr["dest"] = arg["name"];
-                instr["type"] = arg["type"];
-                instr["op"] = "arg";
-                curBlock.push(instr);
-            }
-        }
+        // if (a.contains("args")) {
+        //     for (auto arg : a["args"]) {
+        //         json instr;
+        //         instr["dest"] = arg["name"];
+        //         instr["type"] = arg["type"];
+        //         instr["op"] = "arg";
+        //         curBlock.push(instr);
+        //     }
+        // }
         if (a["name"] == "main") {
             mainLabel_ = curLabel;
         }
@@ -52,6 +52,7 @@ BasicBlocks::BasicBlocks(json &j) {
                 labelNameToBlock_[to_string(*(--funcStartLabels.upper_bound(
                                       curLabel))) +
                                   string(instr["label"])] = curLabel;
+                curBlock.push(instr);
             } else {
                 curBlock.push(instr);
             }

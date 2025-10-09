@@ -134,25 +134,25 @@ map<int, set<int>> findDominators(shared_ptr<BasicBlocks> basicBlocks) {
     return dom;
 }
 
-#ifndef DOMINATOR_LIB
-int main(int argc, char *argv[]) {
-    json j;
-    cin >> j;
+// #ifndef DOMINATOR_LIB
+// int main(int argc, char *argv[]) {
+//     json j;
+//     cin >> j;
 
-    shared_ptr<BasicBlocks> basicBlocks = make_shared<BasicBlocks>(j);
-    map<int, set<int>> dominators = findDominators(basicBlocks);
+//     shared_ptr<BasicBlocks> basicBlocks = make_shared<BasicBlocks>(j);
+//     map<int, set<int>> dominators = findDominators(basicBlocks);
 
-    cout << "printing dominators\n";
-    printDominators(dominators);
+//     cout << "printing dominators\n";
+//     printDominators(dominators);
 
-    map<int, set<int>> immediateDominators =
-        findImmediateDominators(dominators);
-    cout << "\nprinting immediate dominators\n";
-    printDominators(immediateDominators);
+//     map<int, set<int>> immediateDominators =
+//         findImmediateDominators(dominators);
+//     cout << "\nprinting immediate dominators\n";
+//     printDominators(immediateDominators);
 
-    map<int, set<int>> dominanceFrontier =
-        findDominanceFrontier(basicBlocks, dominators);
-    cout << "\nprinting dominance frontier\n";
-    printDominaceFrontier(dominanceFrontier);
-}
-#endif
+//     map<int, set<int>> dominanceFrontier =
+//         findDominanceFrontier(basicBlocks, dominators);
+//     cout << "\nprinting dominance frontier\n";
+//     printDominaceFrontier(dominanceFrontier);
+// }
+// #endif
