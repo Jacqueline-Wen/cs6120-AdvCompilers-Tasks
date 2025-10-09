@@ -1,1 +1,6 @@
-command = "g++ ssa.cpp ../utility/BasicBlocks.cpp dominator.o -I/opt/homebrew/include -std=c++17 -o ssa && bril2json < {filename} | ./ssa"
+[envs.out]
+command = "g++ ssa.cpp ../utility/BasicBlocks.cpp dominator.o -I/opt/homebrew/include -std=c++17 -o ssa && bril2json < {filename} | ./ssa --round-trip"
+
+[envs.is_ssa]
+command = "bril2json < {filename} | ./ssa --to-ssa | python3 ./is_ssa.py"
+output.is_ssa = "-"

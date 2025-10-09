@@ -36,7 +36,7 @@ void printSSA();
 // Main SSA conversion function
 void convertToSSA(shared_ptr<BasicBlocks> basicBlocks)
 {
-    cout << "Converting to SSA..." << endl;
+    // cout << "Converting to SSA..." << endl;
 
     // Reset global state
     variableDefs.clear();
@@ -49,15 +49,15 @@ void convertToSSA(shared_ptr<BasicBlocks> basicBlocks)
     map<int, set<int>> dominators = findDominators(basicBlocks);
     map<int, set<int>> dominanceFrontier = findDominanceFrontier(basicBlocks, dominators);
 
-    cout << "\nPrinting dominance frontier:\n";
-    printDominaceFrontier(dominanceFrontier);
+    // cout << "\nPrinting dominance frontier:\n";
+    // printDominaceFrontier(dominanceFrontier);
 
     // Perform SSA conversion steps
     collectVariableDefinitions(basicBlocks);
     insertPhiNodes(basicBlocks, dominanceFrontier);
     renameVariables(basicBlocks, dominators);
 
-    cout << "SSA conversion complete!" << endl;
+    // cout << "SSA conversion complete!" << endl;
 }
 
 void collectVariableDefinitions(shared_ptr<BasicBlocks> basicBlocks)
@@ -415,20 +415,124 @@ const map<int, vector<json>> &getSSABlocks()
     return ssaInstructions;
 }
 
-int main(int argc, char *argv[])
+static inline bool isTerminator(const json &instr) {
+    if (!instr.contains("op")) return false;
+    const string op = instr["op"];
+    return (op=="br" || op=="jmp" || op=="ret");
+}
+
+void insertCopyInPred(int predId, const string &dest, const string &src) {
+    json copy;
+    copy["op"] = "id";
+    copy["dest"] = dest;
+    copy["args"] = json::array({src});
+
+    auto &vec = ssaInstructions[predId];
+    int pos = (int)vec.size();
+    while (pos>0 && isTerminator(vec[pos-1])) {
+        --pos;
+    }
+    vec.insert(vec.begin() + pos, copy);
+}
+
+void convertFromSSA(shared_ptr<BasicBlocks> basicBlocks) {
+    // cout << "\n===Converting out of SSA (eliminating the phis)==="<<endl;
+    auto blocks = basicBlocks->getBlocks();
+
+    for (auto &entry : ssaInstructions)
+    {
+        int blockId = entry.first;
+        
+        vector<int> phiIdx;
+        for(int i=0; i<(int)entry.second.size(); ++i) {
+            const json &instr = entry.second[i];
+            if (instr.contains("op") && instr["op"] == "phi") {
+                phiIdx.push_back(i);
+            }
+        }
+        if (phiIdx.empty()) continue;
+
+        for (int idx: phiIdx) {
+            const json &phi = entry.second[idx];
+            string dest = phi["dest"];
+            const auto &args = phi["args"];
+            const auto &labels = phi["labels"];
+
+            for (size_t k=0; k<labels.size(); ++k) {
+                int predId = labels[k];
+                string src = args[k];
+                insertCopyInPred(predId, dest, src);
+            }
+        }
+        
+    }
+
+    //removing phi nodes
+    for(auto &entry: ssaInstructions) {
+        auto &vec = entry.second;
+        vector<json> cleaned;
+        cleaned.reserve(vec.size());
+        for(auto &instr: vec) {
+            if (instr.contains("op") && instr["op"] == "phi") {
+
+            }
+            else {
+                cleaned.push_back(instr);
+            }
+        }
+        vec.swap(cleaned);
+    }
+}
+
+int main(int argc, char** argv) //char *argv[])
 {
+    ios::sync_with_stdio(false);
+
+    bool to_ssa = false; 
+    bool from_ssa = false;
+    bool round_trip = false;
+
+    for (int i = 1; i < argc; ++i) {
+        string a = argv[i];
+        if (a == "--round-trip") {round_trip = true;}
+        else if (a == "--to-ssa") {to_ssa = true; }
+        else if (a == "--from-ssa") {from_ssa = true;}
+    }
+
     json j;
     cin >> j;
 
     shared_ptr<BasicBlocks> basicBlocks = make_shared<BasicBlocks>(j);
 
-    convertToSSA(basicBlocks);
-    printSSA();
+    if (to_ssa) {
+        convertToSSA(basicBlocks);
+        // printSSA();
 
-    // Output the SSA as JSON
-    json ssaJson = getSSAJson();
-    cout << "\n=== SSA JSON ===" << endl;
-    cout << ssaJson.dump(2) << endl;
+        // Output the SSA as JSON
+        json ssaJson = getSSAJson();
+        // cout << "\n=== SSA JSON ===" << endl;
+        cout << ssaJson.dump(2) << endl;
+        return 0;
+    }
+    else if (round_trip) {
+        convertToSSA(basicBlocks);
+        json ssaJson = getSSAJson();
+        cout << ssaJson.dump(2) << endl;
+
+        convertFromSSA(basicBlocks);
+        json nonSsaJson = getSSAJson();
+        cout << nonSsaJson.dump(2) << endl;
+    }
+
+    if (from_ssa){
+        convertToSSA(basicBlocks);
+        json ssaJson = getSSAJson();
+
+        convertFromSSA(basicBlocks);
+        json nonSsaJson = getSSAJson();
+        // cout << "\n=== Final JSON (no phis) ===\n";
+        cout << nonSsaJson.dump(2) << endl;
+    }
 
     return 0;
 }
