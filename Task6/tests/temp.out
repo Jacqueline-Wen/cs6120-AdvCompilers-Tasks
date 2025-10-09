@@ -1,207 +1,237 @@
-[
-  {
-    "dest": "m_2",
-    "op": "arg",
-    "type": "bool"
-  },
-  {
-    "dest": "a_3",
-    "op": "const",
-    "type": "int",
-    "value": 3
-  },
-  {
-    "args": [
-      "m_2"
-    ],
-    "labels": [
-      "left",
-      "right"
-    ],
-    "op": "br"
-  },
-  {
-    "args": [
-      "a_3",
-      "a_3"
-    ],
-    "dest": "a_4",
-    "op": "add",
-    "type": "int"
-  },
-  {
-    "args": [
-      "m_2"
-    ],
-    "labels": [
-      "end1",
-      "end2"
-    ],
-    "op": "br"
-  },
-  {
-    "args": [
-      "a_3",
-      "a_3"
-    ],
-    "dest": "a_5",
-    "op": "mul",
-    "type": "int"
-  },
-  {
-    "args": [
-      "m_2"
-    ],
-    "labels": [
-      "end1",
-      "end2"
-    ],
-    "op": "br"
-  },
-  {
-    "args": [
-      "a_4",
-      "a_5"
-    ],
-    "dest": "a_0",
-    "labels": [
-      2,
-      3
-    ],
-    "op": "phi"
-  },
-  {
-    "args": [
-      "a_0"
-    ],
-    "op": "print"
-  },
-  {
-    "args": [
-      "a_4",
-      "a_5",
-      "a_0"
-    ],
-    "dest": "a_1",
-    "labels": [
-      2,
-      3,
-      4
-    ],
-    "op": "phi"
-  },
-  {
-    "args": [
-      "a_1"
-    ],
-    "op": "print"
-  }
-]
-[
-  {
-    "dest": "m_2",
-    "op": "arg",
-    "type": "bool"
-  },
-  {
-    "dest": "a_3",
-    "op": "const",
-    "type": "int",
-    "value": 3
-  },
-  {
-    "args": [
-      "m_2"
-    ],
-    "labels": [
-      "left",
-      "right"
-    ],
-    "op": "br"
-  },
-  {
-    "args": [
-      "a_3",
-      "a_3"
-    ],
-    "dest": "a_4",
-    "op": "add",
-    "type": "int"
-  },
-  {
-    "args": [
-      "a_4"
-    ],
-    "dest": "a_0",
-    "op": "id"
-  },
-  {
-    "args": [
-      "a_4"
-    ],
-    "dest": "a_1",
-    "op": "id"
-  },
-  {
-    "args": [
-      "m_2"
-    ],
-    "labels": [
-      "end1",
-      "end2"
-    ],
-    "op": "br"
-  },
-  {
-    "args": [
-      "a_3",
-      "a_3"
-    ],
-    "dest": "a_5",
-    "op": "mul",
-    "type": "int"
-  },
-  {
-    "args": [
-      "a_5"
-    ],
-    "dest": "a_0",
-    "op": "id"
-  },
-  {
-    "args": [
-      "a_5"
-    ],
-    "dest": "a_1",
-    "op": "id"
-  },
-  {
-    "args": [
-      "m_2"
-    ],
-    "labels": [
-      "end1",
-      "end2"
-    ],
-    "op": "br"
-  },
-  {
-    "args": [
-      "a_0"
-    ],
-    "op": "print"
-  },
-  {
-    "args": [
-      "a_0"
-    ],
-    "dest": "a_1",
-    "op": "id"
-  },
-  {
-    "args": [
-      "a_1"
-    ],
-    "op": "print"
-  }
-]
+
+=== SSA JSON ===
+{
+  "functions": [
+    {
+      "args": [
+        {
+          "name": "m",
+          "type": "bool"
+        }
+      ],
+      "instrs": [
+        {
+          "dest": "m_2",
+          "op": "arg",
+          "type": "bool"
+        },
+        {
+          "dest": "a_3",
+          "op": "const",
+          "type": "int",
+          "value": 3
+        },
+        {
+          "args": [
+            "m_2"
+          ],
+          "labels": [
+            "left",
+            "right"
+          ],
+          "op": "br"
+        },
+        {
+          "args": [
+            "a_3",
+            "a_3"
+          ],
+          "dest": "a_4",
+          "op": "add",
+          "type": "int"
+        },
+        {
+          "args": [
+            "m_2"
+          ],
+          "labels": [
+            "end1",
+            "end2"
+          ],
+          "op": "br"
+        },
+        {
+          "args": [
+            "a_3",
+            "a_3"
+          ],
+          "dest": "a_5",
+          "op": "mul",
+          "type": "int"
+        },
+        {
+          "args": [
+            "m_2"
+          ],
+          "labels": [
+            "end1",
+            "end2"
+          ],
+          "op": "br"
+        },
+        {
+          "args": [
+            "a_4",
+            "a_5"
+          ],
+          "dest": "a_0",
+          "labels": [
+            2,
+            3
+          ],
+          "op": "phi"
+        },
+        {
+          "args": [
+            "a_0"
+          ],
+          "op": "print"
+        },
+        {
+          "args": [
+            "a_4",
+            "a_5",
+            "a_0"
+          ],
+          "dest": "a_1",
+          "labels": [
+            2,
+            3,
+            4
+          ],
+          "op": "phi"
+        },
+        {
+          "args": [
+            "a_1"
+          ],
+          "op": "print"
+        }
+      ],
+      "name": "main"
+    }
+  ]
+}
+
+=== Final JSON (no phis) ===
+{
+  "functions": [
+    {
+      "args": [
+        {
+          "name": "m",
+          "type": "bool"
+        }
+      ],
+      "instrs": [
+        {
+          "dest": "m_2",
+          "op": "arg",
+          "type": "bool"
+        },
+        {
+          "dest": "a_3",
+          "op": "const",
+          "type": "int",
+          "value": 3
+        },
+        {
+          "args": [
+            "m_2"
+          ],
+          "labels": [
+            "left",
+            "right"
+          ],
+          "op": "br"
+        },
+        {
+          "args": [
+            "a_3",
+            "a_3"
+          ],
+          "dest": "a_4",
+          "op": "add",
+          "type": "int"
+        },
+        {
+          "args": [
+            "a_4"
+          ],
+          "dest": "a_0",
+          "op": "id"
+        },
+        {
+          "args": [
+            "a_4"
+          ],
+          "dest": "a_1",
+          "op": "id"
+        },
+        {
+          "args": [
+            "m_2"
+          ],
+          "labels": [
+            "end1",
+            "end2"
+          ],
+          "op": "br"
+        },
+        {
+          "args": [
+            "a_3",
+            "a_3"
+          ],
+          "dest": "a_5",
+          "op": "mul",
+          "type": "int"
+        },
+        {
+          "args": [
+            "a_5"
+          ],
+          "dest": "a_0",
+          "op": "id"
+        },
+        {
+          "args": [
+            "a_5"
+          ],
+          "dest": "a_1",
+          "op": "id"
+        },
+        {
+          "args": [
+            "m_2"
+          ],
+          "labels": [
+            "end1",
+            "end2"
+          ],
+          "op": "br"
+        },
+        {
+          "args": [
+            "a_0"
+          ],
+          "op": "print"
+        },
+        {
+          "args": [
+            "a_0"
+          ],
+          "dest": "a_1",
+          "op": "id"
+        },
+        {
+          "args": [
+            "a_1"
+          ],
+          "op": "print"
+        }
+      ],
+      "name": "main"
+    }
+  ]
+}

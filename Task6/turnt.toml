@@ -4,3 +4,7 @@ command = "g++ ssa.cpp ../utility/BasicBlocks.cpp dominator.o -I/opt/homebrew/in
 [envs.is_ssa]
 command = "bril2json < {filename} | ./ssa --to-ssa | python3 ./is_ssa.py"
 output.is_ssa = "-"
+
+[envs.more_testing]
+command = "bril2json < {filename} | ./ssa --from-ssa | brili"
+output.more_testing = "-"

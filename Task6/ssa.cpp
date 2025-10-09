@@ -33,6 +33,29 @@ void popBlockDefinitions(int blockId, shared_ptr<BasicBlocks> basicBlocks);
 vector<int> getDominatedChildren(int blockId, const map<int, set<int>> &dominators);
 void printSSA();
 
+// Replace the previous write_back with this one
+static inline void write_back_instrs_into_json(json &j) {
+    // target standard bril2json shape
+    json *fn = nullptr;
+    if (j.contains("functions") && j["functions"].is_array() && !j["functions"].empty()) {
+        fn = &j["functions"][0];
+    } else if (j.contains("instrs") && j["instrs"].is_array()) {
+        fn = &j; // fallback: single-function JSON
+    } else {
+        return; // nothing to do
+    }
+
+    // Deterministic order: map<int,...> iterates by ascending key (block id)
+    json new_instrs = json::array();
+    for (const auto &entry : ssaInstructions) {
+        const auto &vec = entry.second;
+        for (const auto &instr : vec) new_instrs.push_back(instr);
+    }
+
+    (*fn)["instrs"] = std::move(new_instrs);
+}
+
+
 // Main SSA conversion function
 void convertToSSA(shared_ptr<BasicBlocks> basicBlocks)
 {
@@ -507,31 +530,38 @@ int main(int argc, char** argv) //char *argv[])
     if (to_ssa) {
         convertToSSA(basicBlocks);
         // printSSA();
+        write_back_instrs_into_json(j);
 
         // Output the SSA as JSON
-        json ssaJson = getSSAJson();
+        // json ssaJson = getSSAJson();
         // cout << "\n=== SSA JSON ===" << endl;
-        cout << ssaJson.dump(2) << endl;
+        cout << j.dump(2) << endl;
         return 0;
     }
     else if (round_trip) {
         convertToSSA(basicBlocks);
-        json ssaJson = getSSAJson();
-        cout << ssaJson.dump(2) << endl;
+        // json ssaJson = getSSAJson();
+        write_back_instrs_into_json(j);
+        cout << "\n=== SSA JSON ===" << endl;
+        cout << j.dump(2) << endl;
 
         convertFromSSA(basicBlocks);
-        json nonSsaJson = getSSAJson();
-        cout << nonSsaJson.dump(2) << endl;
+        // json nonSsaJson = getSSAJson();
+        write_back_instrs_into_json(j);
+        cout << "\n=== Final JSON (no phis) ===\n";
+        cout << j.dump(2) << endl;
     }
 
-    if (from_ssa){
+    else if (from_ssa){
         convertToSSA(basicBlocks);
-        json ssaJson = getSSAJson();
+        // json ssaJson = getSSAJson();
+        write_back_instrs_into_json(j);
 
         convertFromSSA(basicBlocks);
-        json nonSsaJson = getSSAJson();
+        write_back_instrs_into_json(j);
+        // json nonSsaJson = getSSAJson();
         // cout << "\n=== Final JSON (no phis) ===\n";
-        cout << nonSsaJson.dump(2) << endl;
+        cout << j.dump(2) << endl;
     }
 
     return 0;
