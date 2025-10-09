@@ -134,6 +134,7 @@ map<int, set<int>> findDominators(shared_ptr<BasicBlocks> basicBlocks) {
     return dom;
 }
 
+#ifndef DOMINATOR_LIB
 int main(int argc, char *argv[]) {
     json j;
     cin >> j;
@@ -154,3 +155,4 @@ int main(int argc, char *argv[]) {
     cout << "\nprinting dominance frontier\n";
     printDominaceFrontier(dominanceFrontier);
 }
+#endif
