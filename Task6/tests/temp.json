@@ -9,19 +9,14 @@
       ],
       "instrs": [
         {
-          "dest": "m_2",
-          "op": "args",
-          "type": "bool"
-        },
-        {
-          "dest": "a_3",
+          "dest": "a",
           "op": "const",
           "type": "int",
           "value": 3
         },
         {
           "args": [
-            "m_2"
+            "m"
           ],
           "labels": [
             "left",
@@ -30,17 +25,20 @@
           "op": "br"
         },
         {
+          "label": "left"
+        },
+        {
           "args": [
-            "a_3",
-            "a_3"
+            "a",
+            "a"
           ],
-          "dest": "a_4",
+          "dest": "a",
           "op": "add",
           "type": "int"
         },
         {
           "args": [
-            "m_2"
+            "m"
           ],
           "labels": [
             "end1",
@@ -49,17 +47,20 @@
           "op": "br"
         },
         {
+          "label": "right"
+        },
+        {
           "args": [
-            "a_3",
-            "a_3"
+            "a",
+            "a"
           ],
-          "dest": "a_5",
+          "dest": "a",
           "op": "mul",
           "type": "int"
         },
         {
           "args": [
-            "m_2"
+            "m"
           ],
           "labels": [
             "end1",
@@ -68,40 +69,20 @@
           "op": "br"
         },
         {
-          "args": [
-            "a_4",
-            "a_5"
-          ],
-          "dest": "a_0",
-          "labels": [
-            2,
-            3
-          ],
-          "op": "phi"
+          "label": "end1"
         },
         {
           "args": [
-            "a_0"
+            "a"
           ],
           "op": "print"
         },
         {
-          "args": [
-            "a_4",
-            "a_5",
-            "a_0"
-          ],
-          "dest": "a_1",
-          "labels": [
-            2,
-            3,
-            4
-          ],
-          "op": "phi"
+          "label": "end2"
         },
         {
           "args": [
-            "a_1"
+            "a"
           ],
           "op": "print"
         }

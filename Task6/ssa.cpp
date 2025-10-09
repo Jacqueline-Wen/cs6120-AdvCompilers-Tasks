@@ -1,14 +1,14 @@
-#include "../utility/basicBlocks.hpp"
 #include "../Task5/dominator.hpp"
+#include "../utility/basicBlocks.hpp"
 #include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <map>
+#include <memory>
 #include <nlohmann/json.hpp>
 #include <set>
 #include <stack>
 #include <vector>
-#include <memory>
 
 using namespace std;
 using json = nlohmann::json;
@@ -30,14 +30,16 @@ void renameBlock(int blockId, shared_ptr<BasicBlocks> basicBlocks,
                  const map<int, set<int>> &dominators);
 void processBlockInstructions(int blockId, shared_ptr<BasicBlocks> basicBlocks);
 void popBlockDefinitions(int blockId, shared_ptr<BasicBlocks> basicBlocks);
-vector<int> getDominatedChildren(int blockId, const map<int, set<int>> &dominators);
+vector<int> getDominatedChildren(int blockId,
+                                 const map<int, set<int>> &dominators);
 void printSSA();
 
 // Replace the previous write_back with this one
 static inline void write_back_instrs_into_json(json &j) {
     // target standard bril2json shape
     json *fn = nullptr;
-    if (j.contains("functions") && j["functions"].is_array() && !j["functions"].empty()) {
+    if (j.contains("functions") && j["functions"].is_array() &&
+        !j["functions"].empty()) {
         fn = &j["functions"][0];
     } else if (j.contains("instrs") && j["instrs"].is_array()) {
         fn = &j; // fallback: single-function JSON
@@ -49,16 +51,15 @@ static inline void write_back_instrs_into_json(json &j) {
     json new_instrs = json::array();
     for (const auto &entry : ssaInstructions) {
         const auto &vec = entry.second;
-        for (const auto &instr : vec) new_instrs.push_back(instr);
+        for (const auto &instr : vec)
+            new_instrs.push_back(instr);
     }
 
     (*fn)["instrs"] = std::move(new_instrs);
 }
 
-
 // Main SSA conversion function
-void convertToSSA(shared_ptr<BasicBlocks> basicBlocks)
-{
+void convertToSSA(shared_ptr<BasicBlocks> basicBlocks) {
     // cout << "Converting to SSA..." << endl;
 
     // Reset global state
@@ -70,7 +71,8 @@ void convertToSSA(shared_ptr<BasicBlocks> basicBlocks)
 
     // Compute dominators and dominance frontier
     map<int, set<int>> dominators = findDominators(basicBlocks);
-    map<int, set<int>> dominanceFrontier = findDominanceFrontier(basicBlocks, dominators);
+    map<int, set<int>> dominanceFrontier =
+        findDominanceFrontier(basicBlocks, dominators);
 
     // cout << "\nPrinting dominance frontier:\n";
     // printDominaceFrontier(dominanceFrontier);
@@ -83,33 +85,25 @@ void convertToSSA(shared_ptr<BasicBlocks> basicBlocks)
     // cout << "SSA conversion complete!" << endl;
 }
 
-void collectVariableDefinitions(shared_ptr<BasicBlocks> basicBlocks)
-{
+void collectVariableDefinitions(shared_ptr<BasicBlocks> basicBlocks) {
     auto blocks = basicBlocks->getBlocks();
 
-    for (const auto &blockEntry : blocks)
-    {
+    for (const auto &blockEntry : blocks) {
         int blockId = blockEntry.first;
         const vector<json> &instructions = blockEntry.second;
 
-        for (const auto &instr : instructions)
-        {
-            if (instr.contains("dest"))
-            {
+        for (const auto &instr : instructions) {
+            if (instr.contains("dest")) {
                 string var = instr["dest"];
                 variableDefs[var].insert(blockId);
             }
 
             // Track all variables used
-            if (instr.contains("args"))
-            {
-                for (const auto &arg : instr["args"])
-                {
-                    if (arg.is_string())
-                    {
+            if (instr.contains("args")) {
+                for (const auto &arg : instr["args"]) {
+                    if (arg.is_string()) {
                         string var = arg;
-                        if (variableDefs.find(var) == variableDefs.end())
-                        {
+                        if (variableDefs.find(var) == variableDefs.end()) {
                             variableDefs[var] = set<int>();
                         }
                     }
@@ -120,29 +114,23 @@ void collectVariableDefinitions(shared_ptr<BasicBlocks> basicBlocks)
 }
 
 void insertPhiNodes(shared_ptr<BasicBlocks> basicBlocks,
-                    const map<int, set<int>> &dominanceFrontier)
-{
-    for (const auto &varEntry : variableDefs)
-    {
+                    const map<int, set<int>> &dominanceFrontier) {
+    for (const auto &varEntry : variableDefs) {
         const string &var = varEntry.first;
         const set<int> &defs = varEntry.second;
 
         set<int> worklist(defs.begin(), defs.end());
         set<int> processed;
 
-        while (!worklist.empty())
-        {
+        while (!worklist.empty()) {
             int d = *worklist.begin();
             worklist.erase(worklist.begin());
 
             auto dfIt = dominanceFrontier.find(d);
-            if (dfIt != dominanceFrontier.end())
-            {
+            if (dfIt != dominanceFrontier.end()) {
                 const set<int> &dfSet = dfIt->second;
-                for (int block : dfSet)
-                {
-                    if (processed.find(block) == processed.end())
-                    {
+                for (int block : dfSet) {
+                    if (processed.find(block) == processed.end()) {
                         // Create phi node as JSON
                         json phi;
                         phi["op"] = "phi";
@@ -151,16 +139,15 @@ void insertPhiNodes(shared_ptr<BasicBlocks> basicBlocks,
 
                         // Initialize with empty args for each predecessor
                         auto preds = basicBlocks->getPredecessors(block);
-                        for (size_t i = 0; i < preds.size(); i++)
-                        {
+                        for (size_t i = 0; i < preds.size(); i++) {
                             phi["args"].push_back("");
                         }
                         phi["labels"] = preds;
 
                         phiNodes[block].push_back(phi);
 
-                        if (variableDefs[var].find(block) == variableDefs[var].end())
-                        {
+                        if (variableDefs[var].find(block) ==
+                            variableDefs[var].end()) {
                             variableDefs[var].insert(block);
                             worklist.insert(block);
                         }
@@ -174,11 +161,9 @@ void insertPhiNodes(shared_ptr<BasicBlocks> basicBlocks,
 }
 
 void renameVariables(shared_ptr<BasicBlocks> basicBlocks,
-                     const map<int, set<int>> &dominators)
-{
+                     const map<int, set<int>> &dominators) {
     // Initialize variable stacks with version 0
-    for (const auto &varEntry : variableDefs)
-    {
+    for (const auto &varEntry : variableDefs) {
         variableStack[varEntry.first].push(varEntry.first + "_0");
     }
 
@@ -186,14 +171,11 @@ void renameVariables(shared_ptr<BasicBlocks> basicBlocks,
 }
 
 void renameBlock(int blockId, shared_ptr<BasicBlocks> basicBlocks,
-                 const map<int, set<int>> &dominators)
-{
+                 const map<int, set<int>> &dominators) {
     // Process phi-nodes in this block first
     auto phiIt = phiNodes.find(blockId);
-    if (phiIt != phiNodes.end())
-    {
-        for (auto &phi : phiIt->second)
-        {
+    if (phiIt != phiNodes.end()) {
+        for (auto &phi : phiIt->second) {
             string var = phi["dest"].get<string>();
             size_t pos = var.find_last_of('_');
             string baseVar = var.substr(0, pos);
@@ -209,13 +191,10 @@ void renameBlock(int blockId, shared_ptr<BasicBlocks> basicBlocks,
 
     // Fill in phi-node arguments in successors
     auto successors = basicBlocks->getSuccessors(blockId);
-    for (int succ : successors)
-    {
+    for (int succ : successors) {
         auto succPhiIt = phiNodes.find(succ);
-        if (succPhiIt != phiNodes.end())
-        {
-            for (auto &phi : succPhiIt->second)
-            {
+        if (succPhiIt != phiNodes.end()) {
+            for (auto &phi : succPhiIt->second) {
                 string var = phi["dest"].get<string>();
                 size_t pos = var.find_last_of('_');
                 string baseVar = var.substr(0, pos);
@@ -223,11 +202,9 @@ void renameBlock(int blockId, shared_ptr<BasicBlocks> basicBlocks,
                 // Find our position in the predecessor list
                 auto preds = basicBlocks->getPredecessors(succ);
                 auto it = find(preds.begin(), preds.end(), blockId);
-                if (it != preds.end())
-                {
+                if (it != preds.end()) {
                     int predIndex = distance(preds.begin(), it);
-                    if (predIndex < phi["args"].size())
-                    {
+                    if (predIndex < phi["args"].size()) {
                         phi["args"][predIndex] = variableStack[baseVar].top();
                     }
                 }
@@ -236,8 +213,7 @@ void renameBlock(int blockId, shared_ptr<BasicBlocks> basicBlocks,
     }
 
     // Process dominated children
-    for (int child : getDominatedChildren(blockId, dominators))
-    {
+    for (int child : getDominatedChildren(blockId, dominators)) {
         renameBlock(child, basicBlocks, dominators);
     }
 
@@ -245,39 +221,35 @@ void renameBlock(int blockId, shared_ptr<BasicBlocks> basicBlocks,
     popBlockDefinitions(blockId, basicBlocks);
 }
 
-void processBlockInstructions(int blockId, shared_ptr<BasicBlocks> basicBlocks)
-{
+void processBlockInstructions(int blockId,
+                              shared_ptr<BasicBlocks> basicBlocks) {
     auto blocks = basicBlocks->getBlocks();
     const vector<json> &instructions = blocks.at(blockId);
 
-    for (const auto &instr : instructions)
-    {
-        if (!instr.contains("op"))
+    for (const auto &instr : instructions) {
+        if (!instr.contains("op")) {
+            if (instr.contains("label")) {
+                ssaInstructions[blockId].push_back(instr);
+            }
             continue;
+        }
 
         json newInstr = instr;
 
         // Rename arguments (uses)
-        if (instr.contains("args"))
-        {
+        if (instr.contains("args")) {
             vector<string> newArgs;
-            for (const auto &arg : instr["args"])
-            {
-                if (arg.is_string())
-                {
+            for (const auto &arg : instr["args"]) {
+                if (arg.is_string()) {
                     string var = arg;
                     auto stackIt = variableStack.find(var);
-                    if (stackIt != variableStack.end() && !stackIt->second.empty())
-                    {
+                    if (stackIt != variableStack.end() &&
+                        !stackIt->second.empty()) {
                         newArgs.push_back(stackIt->second.top());
-                    }
-                    else
-                    {
+                    } else {
                         newArgs.push_back(var + "_0");
                     }
-                }
-                else
-                {
+                } else {
                     newArgs.push_back(arg);
                 }
             }
@@ -285,8 +257,7 @@ void processBlockInstructions(int blockId, shared_ptr<BasicBlocks> basicBlocks)
         }
 
         // Rename destination (definition)
-        if (instr.contains("dest"))
-        {
+        if (instr.contains("dest")) {
             string var = instr["dest"];
             string newName = var + "_" + to_string(tempCounter++);
             newInstr["dest"] = newName;
@@ -297,20 +268,16 @@ void processBlockInstructions(int blockId, shared_ptr<BasicBlocks> basicBlocks)
     }
 }
 
-void popBlockDefinitions(int blockId, shared_ptr<BasicBlocks> basicBlocks)
-{
+void popBlockDefinitions(int blockId, shared_ptr<BasicBlocks> basicBlocks) {
     auto blocks = basicBlocks->getBlocks();
     const vector<json> &instructions = blocks.at(blockId);
 
     // Pop variables defined by regular instructions
-    for (const auto &instr : instructions)
-    {
-        if (instr.contains("dest"))
-        {
+    for (const auto &instr : instructions) {
+        if (instr.contains("dest")) {
             string var = instr["dest"];
             auto stackIt = variableStack.find(var);
-            if (stackIt != variableStack.end() && !stackIt->second.empty())
-            {
+            if (stackIt != variableStack.end() && !stackIt->second.empty()) {
                 stackIt->second.pop();
             }
         }
@@ -318,53 +285,44 @@ void popBlockDefinitions(int blockId, shared_ptr<BasicBlocks> basicBlocks)
 
     // Pop variables defined by phi nodes
     auto phiIt = phiNodes.find(blockId);
-    if (phiIt != phiNodes.end())
-    {
-        for (const auto &phi : phiIt->second)
-        {
+    if (phiIt != phiNodes.end()) {
+        for (const auto &phi : phiIt->second) {
             string var = phi["dest"].get<string>();
             size_t pos = var.find_last_of('_');
             string baseVar = var.substr(0, pos);
             auto stackIt = variableStack.find(baseVar);
-            if (stackIt != variableStack.end() && !stackIt->second.empty())
-            {
+            if (stackIt != variableStack.end() && !stackIt->second.empty()) {
                 stackIt->second.pop();
             }
         }
     }
 }
 
-vector<int> getDominatedChildren(int blockId, const map<int, set<int>> &dominators)
-{
+vector<int> getDominatedChildren(int blockId,
+                                 const map<int, set<int>> &dominators) {
     vector<int> children;
-    for (const auto &domEntry : dominators)
-    {
+    for (const auto &domEntry : dominators) {
         int otherBlock = domEntry.first;
-        if (otherBlock != blockId)
-        {
+        if (otherBlock != blockId) {
             const set<int> &otherDominators = domEntry.second;
-            if (otherDominators.find(blockId) != otherDominators.end())
-            {
+            if (otherDominators.find(blockId) != otherDominators.end()) {
                 bool isImmediate = true;
-                for (int dom : otherDominators)
-                {
-                    if (dom != blockId && dom != otherBlock)
-                    {
+                for (int dom : otherDominators) {
+                    if (dom != blockId && dom != otherBlock) {
                         auto domIt = dominators.find(dom);
-                        if (domIt != dominators.end())
-                        {
+                        if (domIt != dominators.end()) {
                             const set<int> &domDominators = domIt->second;
-                            if (otherDominators.find(dom) != otherDominators.end() &&
-                                domDominators.find(blockId) != domDominators.end())
-                            {
+                            if (otherDominators.find(dom) !=
+                                    otherDominators.end() &&
+                                domDominators.find(blockId) !=
+                                    domDominators.end()) {
                                 isImmediate = false;
                                 break;
                             }
                         }
                     }
                 }
-                if (isImmediate)
-                {
+                if (isImmediate) {
                     children.push_back(otherBlock);
                 }
             }
@@ -373,40 +331,30 @@ vector<int> getDominatedChildren(int blockId, const map<int, set<int>> &dominato
     return children;
 }
 
-void printSSA()
-{
+void printSSA() {
     cout << "\n=== SSA Form ===" << endl;
-    for (const auto &blockEntry : ssaInstructions)
-    {
+    for (const auto &blockEntry : ssaInstructions) {
         int blockId = blockEntry.first;
         cout << "Block " << blockId << ":" << endl;
 
-        for (const auto &instr : blockEntry.second)
-        {
-            if (instr["op"] == "phi")
-            {
+        for (const auto &instr : blockEntry.second) {
+            if (instr["op"] == "phi") {
                 cout << "  " << instr["dest"] << " = phi ";
                 const auto &args = instr["args"];
                 const auto &labels = instr["labels"];
-                for (size_t i = 0; i < args.size(); ++i)
-                {
+                for (size_t i = 0; i < args.size(); ++i) {
                     cout << args[i] << " " << labels[i] << " ";
                 }
                 cout << endl;
-            }
-            else
-            {
+            } else {
                 cout << "  " << instr["op"];
-                if (instr.contains("dest"))
-                {
+                if (instr.contains("dest")) {
                     cout << " " << instr["dest"];
                 }
-                if (instr.contains("args"))
-                {
+                if (instr.contains("args")) {
                     cout << " ";
                     const auto &args = instr["args"];
-                    for (size_t i = 0; i < args.size(); ++i)
-                    {
+                    for (size_t i = 0; i < args.size(); ++i) {
                         if (i > 0)
                             cout << ", ";
                         cout << args[i];
@@ -418,14 +366,11 @@ void printSSA()
     }
 }
 
-json getSSAJson()
-{
+json getSSAJson() {
     json result = json::array();
 
-    for (const auto &blockEntry : ssaInstructions)
-    {
-        for (const auto &instr : blockEntry.second)
-        {
+    for (const auto &blockEntry : ssaInstructions) {
+        for (const auto &instr : blockEntry.second) {
             result.push_back(instr);
         }
     }
@@ -433,15 +378,13 @@ json getSSAJson()
     return result;
 }
 
-const map<int, vector<json>> &getSSABlocks()
-{
-    return ssaInstructions;
-}
+const map<int, vector<json>> &getSSABlocks() { return ssaInstructions; }
 
 static inline bool isTerminator(const json &instr) {
-    if (!instr.contains("op")) return false;
+    if (!instr.contains("op"))
+        return false;
     const string op = instr["op"];
-    return (op=="br" || op=="jmp" || op=="ret");
+    return (op == "br" || op == "jmp" || op == "ret");
 }
 
 void insertCopyInPred(int predId, const string &dest, const string &src) {
@@ -452,7 +395,7 @@ void insertCopyInPred(int predId, const string &dest, const string &src) {
 
     auto &vec = ssaInstructions[predId];
     int pos = (int)vec.size();
-    while (pos>0 && isTerminator(vec[pos-1])) {
+    while (pos > 0 && isTerminator(vec[pos - 1])) {
         --pos;
     }
     vec.insert(vec.begin() + pos, copy);
@@ -462,44 +405,42 @@ void convertFromSSA(shared_ptr<BasicBlocks> basicBlocks) {
     // cout << "\n===Converting out of SSA (eliminating the phis)==="<<endl;
     auto blocks = basicBlocks->getBlocks();
 
-    for (auto &entry : ssaInstructions)
-    {
+    for (auto &entry : ssaInstructions) {
         int blockId = entry.first;
-        
+
         vector<int> phiIdx;
-        for(int i=0; i<(int)entry.second.size(); ++i) {
+        for (int i = 0; i < (int)entry.second.size(); ++i) {
             const json &instr = entry.second[i];
             if (instr.contains("op") && instr["op"] == "phi") {
                 phiIdx.push_back(i);
             }
         }
-        if (phiIdx.empty()) continue;
+        if (phiIdx.empty())
+            continue;
 
-        for (int idx: phiIdx) {
+        for (int idx : phiIdx) {
             const json &phi = entry.second[idx];
             string dest = phi["dest"];
             const auto &args = phi["args"];
             const auto &labels = phi["labels"];
 
-            for (size_t k=0; k<labels.size(); ++k) {
+            for (size_t k = 0; k < labels.size(); ++k) {
                 int predId = labels[k];
                 string src = args[k];
                 insertCopyInPred(predId, dest, src);
             }
         }
-        
     }
 
-    //removing phi nodes
-    for(auto &entry: ssaInstructions) {
+    // removing phi nodes
+    for (auto &entry : ssaInstructions) {
         auto &vec = entry.second;
         vector<json> cleaned;
         cleaned.reserve(vec.size());
-        for(auto &instr: vec) {
+        for (auto &instr : vec) {
             if (instr.contains("op") && instr["op"] == "phi") {
 
-            }
-            else {
+            } else {
                 cleaned.push_back(instr);
             }
         }
@@ -507,19 +448,23 @@ void convertFromSSA(shared_ptr<BasicBlocks> basicBlocks) {
     }
 }
 
-int main(int argc, char** argv) //char *argv[])
+int main(int argc, char **argv) // char *argv[])
 {
     ios::sync_with_stdio(false);
 
-    bool to_ssa = false; 
+    bool to_ssa = false;
     bool from_ssa = false;
     bool round_trip = false;
 
     for (int i = 1; i < argc; ++i) {
         string a = argv[i];
-        if (a == "--round-trip") {round_trip = true;}
-        else if (a == "--to-ssa") {to_ssa = true; }
-        else if (a == "--from-ssa") {from_ssa = true;}
+        if (a == "--round-trip") {
+            round_trip = true;
+        } else if (a == "--to-ssa") {
+            to_ssa = true;
+        } else if (a == "--from-ssa") {
+            from_ssa = true;
+        }
     }
 
     json j;
@@ -537,8 +482,7 @@ int main(int argc, char** argv) //char *argv[])
         // cout << "\n=== SSA JSON ===" << endl;
         cout << j.dump(2) << endl;
         return 0;
-    }
-    else if (round_trip) {
+    } else if (round_trip) {
         convertToSSA(basicBlocks);
         // json ssaJson = getSSAJson();
         write_back_instrs_into_json(j);
@@ -552,7 +496,7 @@ int main(int argc, char** argv) //char *argv[])
         cout << j.dump(2) << endl;
     }
 
-    else if (from_ssa){
+    else if (from_ssa) {
         convertToSSA(basicBlocks);
         // json ssaJson = getSSAJson();
         write_back_instrs_into_json(j);
