@@ -44,7 +44,6 @@ BasicBlocks::BasicBlocks(json &j) {
                         curBlock.pop();
                     }
                     curLabel++;
-                    curBlock.push(instr);
                 }
                 blockToLabelName_[curLabel] =
                     to_string(*(--funcStartLabels.upper_bound(curLabel))) +
