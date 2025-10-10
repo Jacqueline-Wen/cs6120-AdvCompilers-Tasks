@@ -1,0 +1,489 @@
+{
+  "functions": [
+    {
+      "args": [
+        {
+          "name": "x",
+          "type": "int"
+        },
+        {
+          "name": "n",
+          "type": "int"
+        }
+      ],
+      "instrs": [
+        {
+          "dest": "acc_5",
+          "op": "const",
+          "type": "int",
+          "value": 1
+        },
+        {
+          "args": [
+            "x_0",
+            "n_0",
+            "acc_5"
+          ],
+          "dest": "y_6",
+          "funcs": [
+            "bin_pow"
+          ],
+          "op": "call",
+          "type": "int"
+        },
+        {
+          "args": [
+            "y_6"
+          ],
+          "op": "print"
+        },
+        {
+          "args": [
+            "acc2_0"
+          ],
+          "dest": "acc2_0",
+          "op": "id"
+        },
+        {
+          "args": [
+            "is_even_0"
+          ],
+          "dest": "is_even_1",
+          "op": "id"
+        },
+        {
+          "args": [
+            "n2_0"
+          ],
+          "dest": "n2_2",
+          "op": "id"
+        },
+        {
+          "args": [
+            "val_0"
+          ],
+          "dest": "val_3",
+          "op": "id"
+        },
+        {
+          "args": [
+            "x2_0"
+          ],
+          "dest": "x2_4",
+          "op": "id"
+        },
+        {
+          "dest": "two_12",
+          "op": "const",
+          "type": "int",
+          "value": 2
+        },
+        {
+          "args": [
+            "x_0",
+            "two_12"
+          ],
+          "dest": "half_13",
+          "op": "div",
+          "type": "int"
+        },
+        {
+          "args": [
+            "half_13",
+            "two_12"
+          ],
+          "dest": "reconstruct_14",
+          "op": "mul",
+          "type": "int"
+        },
+        {
+          "args": [
+            "x_0",
+            "reconstruct_14"
+          ],
+          "dest": "same_15",
+          "op": "eq",
+          "type": "bool"
+        },
+        {
+          "args": [
+            "same_15"
+          ],
+          "op": "ret"
+        },
+        {
+          "dest": "zero_7",
+          "op": "const",
+          "type": "int",
+          "value": 0
+        },
+        {
+          "dest": "one_8",
+          "op": "const",
+          "type": "int",
+          "value": 1
+        },
+        {
+          "dest": "two_9",
+          "op": "const",
+          "type": "int",
+          "value": 2
+        },
+        {
+          "args": [
+            "n_0",
+            "zero_7"
+          ],
+          "dest": "cond0_10",
+          "op": "eq",
+          "type": "bool"
+        },
+        {
+          "args": [
+            "cond0_10"
+          ],
+          "labels": [
+            "then.0",
+            "else.0"
+          ],
+          "op": "br"
+        },
+        {
+          "label": "then.0"
+        },
+        {
+          "args": [
+            "acc_5"
+          ],
+          "op": "ret"
+        },
+        {
+          "label": "else.0"
+        },
+        {
+          "args": [
+            "n_0"
+          ],
+          "dest": "is_even_11",
+          "funcs": [
+            "is_even"
+          ],
+          "op": "call",
+          "type": "bool"
+        },
+        {
+          "args": [
+            "is_even_11"
+          ],
+          "labels": [
+            "then.1",
+            "else.1"
+          ],
+          "op": "br"
+        },
+        {
+          "label": "then.1"
+        },
+        {
+          "args": [
+            "x_0",
+            "x_0"
+          ],
+          "dest": "x2_16",
+          "op": "mul",
+          "type": "int"
+        },
+        {
+          "args": [
+            "n_0",
+            "two_9"
+          ],
+          "dest": "n2_17",
+          "op": "div",
+          "type": "int"
+        },
+        {
+          "args": [
+            "x2_16",
+            "n2_17",
+            "acc_5"
+          ],
+          "dest": "val_18",
+          "funcs": [
+            "bin_pow"
+          ],
+          "op": "call",
+          "type": "int"
+        },
+        {
+          "args": [
+            "val_18"
+          ],
+          "op": "ret"
+        },
+        {
+          "label": "else.1"
+        },
+        {
+          "args": [
+            "n_0",
+            "one_8"
+          ],
+          "dest": "n2_19",
+          "op": "sub",
+          "type": "int"
+        },
+        {
+          "args": [
+            "x_0",
+            "acc_5"
+          ],
+          "dest": "acc2_20",
+          "op": "mul",
+          "type": "int"
+        },
+        {
+          "args": [
+            "x_0",
+            "n2_19",
+            "acc2_20"
+          ],
+          "dest": "val_21",
+          "funcs": [
+            "bin_pow"
+          ],
+          "op": "call",
+          "type": "int"
+        },
+        {
+          "args": [
+            "val_21"
+          ],
+          "op": "ret"
+        }
+      ],
+      "name": "main"
+    },
+    {
+      "args": [
+        {
+          "name": "x",
+          "type": "int"
+        }
+      ],
+      "instrs": [
+        {
+          "dest": "two",
+          "op": "const",
+          "type": "int",
+          "value": 2
+        },
+        {
+          "args": [
+            "x",
+            "two"
+          ],
+          "dest": "half",
+          "op": "div",
+          "type": "int"
+        },
+        {
+          "args": [
+            "half",
+            "two"
+          ],
+          "dest": "reconstruct",
+          "op": "mul",
+          "type": "int"
+        },
+        {
+          "args": [
+            "x",
+            "reconstruct"
+          ],
+          "dest": "same",
+          "op": "eq",
+          "type": "bool"
+        },
+        {
+          "args": [
+            "same"
+          ],
+          "op": "ret"
+        }
+      ],
+      "name": "is_even",
+      "type": "bool"
+    },
+    {
+      "args": [
+        {
+          "name": "x",
+          "type": "int"
+        },
+        {
+          "name": "n",
+          "type": "int"
+        },
+        {
+          "name": "acc",
+          "type": "int"
+        }
+      ],
+      "instrs": [
+        {
+          "dest": "zero",
+          "op": "const",
+          "type": "int",
+          "value": 0
+        },
+        {
+          "dest": "one",
+          "op": "const",
+          "type": "int",
+          "value": 1
+        },
+        {
+          "dest": "two",
+          "op": "const",
+          "type": "int",
+          "value": 2
+        },
+        {
+          "args": [
+            "n",
+            "zero"
+          ],
+          "dest": "cond0",
+          "op": "eq",
+          "type": "bool"
+        },
+        {
+          "args": [
+            "cond0"
+          ],
+          "labels": [
+            "then.0",
+            "else.0"
+          ],
+          "op": "br"
+        },
+        {
+          "label": "then.0"
+        },
+        {
+          "args": [
+            "acc"
+          ],
+          "op": "ret"
+        },
+        {
+          "label": "else.0"
+        },
+        {
+          "args": [
+            "n"
+          ],
+          "dest": "is_even",
+          "funcs": [
+            "is_even"
+          ],
+          "op": "call",
+          "type": "bool"
+        },
+        {
+          "args": [
+            "is_even"
+          ],
+          "labels": [
+            "then.1",
+            "else.1"
+          ],
+          "op": "br"
+        },
+        {
+          "label": "then.1"
+        },
+        {
+          "args": [
+            "x",
+            "x"
+          ],
+          "dest": "x2",
+          "op": "mul",
+          "type": "int"
+        },
+        {
+          "args": [
+            "n",
+            "two"
+          ],
+          "dest": "n2",
+          "op": "div",
+          "type": "int"
+        },
+        {
+          "args": [
+            "x2",
+            "n2",
+            "acc"
+          ],
+          "dest": "val",
+          "funcs": [
+            "bin_pow"
+          ],
+          "op": "call",
+          "type": "int"
+        },
+        {
+          "args": [
+            "val"
+          ],
+          "op": "ret"
+        },
+        {
+          "label": "else.1"
+        },
+        {
+          "args": [
+            "n",
+            "one"
+          ],
+          "dest": "n2",
+          "op": "sub",
+          "type": "int"
+        },
+        {
+          "args": [
+            "x",
+            "acc"
+          ],
+          "dest": "acc2",
+          "op": "mul",
+          "type": "int"
+        },
+        {
+          "args": [
+            "x",
+            "n2",
+            "acc2"
+          ],
+          "dest": "val",
+          "funcs": [
+            "bin_pow"
+          ],
+          "op": "call",
+          "type": "int"
+        },
+        {
+          "args": [
+            "val"
+          ],
+          "op": "ret"
+        }
+      ],
+      "name": "bin_pow",
+      "type": "int"
+    }
+  ]
+}

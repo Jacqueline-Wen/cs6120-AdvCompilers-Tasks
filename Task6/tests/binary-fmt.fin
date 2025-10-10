@@ -1,0 +1,326 @@
+{
+  "functions": [
+    {
+      "args": [
+        {
+          "name": "n",
+          "type": "int"
+        }
+      ],
+      "instrs": [
+        {
+          "args": [
+            "n_0"
+          ],
+          "funcs": [
+            "printBinary"
+          ],
+          "op": "call"
+        },
+        {
+          "args": [
+            "two_0"
+          ],
+          "dest": "two_0",
+          "op": "id"
+        },
+        {
+          "args": [
+            "v0_0"
+          ],
+          "dest": "v0_2",
+          "op": "id"
+        },
+        {
+          "args": [
+            "v1_0"
+          ],
+          "dest": "v1_4",
+          "op": "id"
+        },
+        {
+          "dest": "zero_6",
+          "op": "const",
+          "type": "int",
+          "value": 0
+        },
+        {
+          "args": [
+            "n_0",
+            "zero_6"
+          ],
+          "dest": "cond_7",
+          "op": "eq",
+          "type": "bool"
+        },
+        {
+          "args": [
+            "two_0"
+          ],
+          "dest": "two_1",
+          "op": "id"
+        },
+        {
+          "args": [
+            "v0_2"
+          ],
+          "dest": "v0_3",
+          "op": "id"
+        },
+        {
+          "args": [
+            "v1_4"
+          ],
+          "dest": "v1_5",
+          "op": "id"
+        },
+        {
+          "args": [
+            "cond_7"
+          ],
+          "labels": [
+            "end",
+            "rec"
+          ],
+          "op": "br"
+        },
+        {
+          "label": "rec"
+        },
+        {
+          "dest": "two_8",
+          "op": "const",
+          "type": "int",
+          "value": 2
+        },
+        {
+          "args": [
+            "n_0",
+            "two_8"
+          ],
+          "dest": "v0_9",
+          "funcs": [
+            "mod"
+          ],
+          "op": "call",
+          "type": "int"
+        },
+        {
+          "args": [
+            "n_0",
+            "two_8"
+          ],
+          "dest": "v1_10",
+          "op": "div",
+          "type": "int"
+        },
+        {
+          "args": [
+            "v1_10"
+          ],
+          "funcs": [
+            "printBinary"
+          ],
+          "op": "call"
+        },
+        {
+          "args": [
+            "v0_9"
+          ],
+          "op": "print"
+        },
+        {
+          "args": [
+            "two_8"
+          ],
+          "dest": "two_1",
+          "op": "id"
+        },
+        {
+          "args": [
+            "v0_9"
+          ],
+          "dest": "v0_3",
+          "op": "id"
+        },
+        {
+          "args": [
+            "v1_10"
+          ],
+          "dest": "v1_5",
+          "op": "id"
+        },
+        {
+          "label": "end"
+        },
+        {
+          "args": [
+            "a0_0",
+            "a1_0"
+          ],
+          "dest": "v0_11",
+          "op": "div",
+          "type": "int"
+        },
+        {
+          "args": [
+            "v0_11",
+            "a1_0"
+          ],
+          "dest": "v1_12",
+          "op": "mul",
+          "type": "int"
+        },
+        {
+          "args": [
+            "a0_0",
+            "v1_12"
+          ],
+          "dest": "v2_13",
+          "op": "sub",
+          "type": "int"
+        },
+        {
+          "args": [
+            "v2_13"
+          ],
+          "op": "ret"
+        }
+      ],
+      "name": "main"
+    },
+    {
+      "args": [
+        {
+          "name": "n",
+          "type": "int"
+        }
+      ],
+      "instrs": [
+        {
+          "dest": "zero",
+          "op": "const",
+          "type": "int",
+          "value": 0
+        },
+        {
+          "args": [
+            "n",
+            "zero"
+          ],
+          "dest": "cond",
+          "op": "eq",
+          "type": "bool"
+        },
+        {
+          "args": [
+            "cond"
+          ],
+          "labels": [
+            "end",
+            "rec"
+          ],
+          "op": "br"
+        },
+        {
+          "label": "rec"
+        },
+        {
+          "dest": "two",
+          "op": "const",
+          "type": "int",
+          "value": 2
+        },
+        {
+          "args": [
+            "n",
+            "two"
+          ],
+          "dest": "v0",
+          "funcs": [
+            "mod"
+          ],
+          "op": "call",
+          "type": "int"
+        },
+        {
+          "args": [
+            "n",
+            "two"
+          ],
+          "dest": "v1",
+          "op": "div",
+          "type": "int"
+        },
+        {
+          "args": [
+            "v1"
+          ],
+          "funcs": [
+            "printBinary"
+          ],
+          "op": "call"
+        },
+        {
+          "args": [
+            "v0"
+          ],
+          "op": "print"
+        },
+        {
+          "label": "end"
+        }
+      ],
+      "name": "printBinary"
+    },
+    {
+      "args": [
+        {
+          "name": "a0",
+          "type": "int"
+        },
+        {
+          "name": "a1",
+          "type": "int"
+        }
+      ],
+      "instrs": [
+        {
+          "args": [
+            "a0",
+            "a1"
+          ],
+          "dest": "v0",
+          "op": "div",
+          "type": "int"
+        },
+        {
+          "args": [
+            "v0",
+            "a1"
+          ],
+          "dest": "v1",
+          "op": "mul",
+          "type": "int"
+        },
+        {
+          "args": [
+            "a0",
+            "v1"
+          ],
+          "dest": "v2",
+          "op": "sub",
+          "type": "int"
+        },
+        {
+          "args": [
+            "v2"
+          ],
+          "op": "ret"
+        }
+      ],
+      "name": "mod",
+      "type": "int"
+    }
+  ]
+}

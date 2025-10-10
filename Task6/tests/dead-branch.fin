@@ -1,0 +1,211 @@
+{
+  "functions": [
+    {
+      "instrs": [
+        {
+          "dest": "v1_7",
+          "op": "const",
+          "type": "int",
+          "value": 1
+        },
+        {
+          "dest": "v2_8",
+          "op": "const",
+          "type": "int",
+          "value": 0
+        },
+        {
+          "dest": "counter_9",
+          "op": "const",
+          "type": "int",
+          "value": 0
+        },
+        {
+          "args": [
+            "counter_9"
+          ],
+          "dest": "counter_0",
+          "op": "id"
+        },
+        {
+          "args": [
+            "v10_0"
+          ],
+          "dest": "v10_1",
+          "op": "id"
+        },
+        {
+          "args": [
+            "v11_0"
+          ],
+          "dest": "v11_2",
+          "op": "id"
+        },
+        {
+          "args": [
+            "v12_0"
+          ],
+          "dest": "v12_3",
+          "op": "id"
+        },
+        {
+          "args": [
+            "v3_0"
+          ],
+          "dest": "v3_4",
+          "op": "id"
+        },
+        {
+          "args": [
+            "v4_0"
+          ],
+          "dest": "v4_6",
+          "op": "id"
+        },
+        {
+          "label": "loop_start"
+        },
+        {
+          "args": [
+            "counter_0"
+          ],
+          "dest": "v7_10",
+          "op": "id",
+          "type": "int"
+        },
+        {
+          "dest": "v8_11",
+          "op": "const",
+          "type": "int",
+          "value": 99
+        },
+        {
+          "args": [
+            "v7_10",
+            "v8_11"
+          ],
+          "dest": "v9_12",
+          "op": "lt",
+          "type": "bool"
+        },
+        {
+          "args": [
+            "v9_12"
+          ],
+          "labels": [
+            "loop_body",
+            "loop_end"
+          ],
+          "op": "br"
+        },
+        {
+          "label": "loop_body"
+        },
+        {
+          "args": [
+            "v1_7",
+            "v2_8"
+          ],
+          "dest": "v3_13",
+          "op": "eq",
+          "type": "bool"
+        },
+        {
+          "args": [
+            "v4_6"
+          ],
+          "dest": "v4_5",
+          "op": "id"
+        },
+        {
+          "args": [
+            "v3_13"
+          ],
+          "labels": [
+            "then",
+            "else"
+          ],
+          "op": "br"
+        },
+        {
+          "label": "then"
+        },
+        {
+          "dest": "v4_14",
+          "op": "const",
+          "type": "int",
+          "value": 100
+        },
+        {
+          "args": [
+            "v4_14"
+          ],
+          "op": "print"
+        },
+        {
+          "args": [
+            "v4_14"
+          ],
+          "dest": "v4_5",
+          "op": "id"
+        },
+        {
+          "label": "else"
+        },
+        {
+          "dest": "v4_15",
+          "op": "const",
+          "type": "int",
+          "value": 50
+        },
+        {
+          "args": [
+            "counter_0"
+          ],
+          "dest": "v10_16",
+          "op": "id",
+          "type": "int"
+        },
+        {
+          "dest": "v11_17",
+          "op": "const",
+          "type": "int",
+          "value": 1
+        },
+        {
+          "args": [
+            "v10_16",
+            "v11_17"
+          ],
+          "dest": "v12_18",
+          "op": "add",
+          "type": "int"
+        },
+        {
+          "args": [
+            "v12_18"
+          ],
+          "dest": "counter_19",
+          "op": "id",
+          "type": "int"
+        },
+        {
+          "labels": [
+            "loop_start"
+          ],
+          "op": "jmp"
+        },
+        {
+          "label": "loop_end"
+        },
+        {
+          "args": [
+            "v4_6"
+          ],
+          "op": "print"
+        }
+      ],
+      "name": "main"
+    }
+  ]
+}

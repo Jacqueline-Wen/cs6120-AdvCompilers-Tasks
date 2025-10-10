@@ -9,19 +9,14 @@
       ],
       "instrs": [
         {
-          "dest": "m_2",
-          "op": "args",
-          "type": "bool"
-        },
-        {
-          "dest": "a_3",
+          "dest": "a_2",
           "op": "const",
           "type": "int",
           "value": 3
         },
         {
           "args": [
-            "m_2"
+            "m_0"
           ],
           "labels": [
             "left",
@@ -30,17 +25,34 @@
           "op": "br"
         },
         {
+          "label": "left"
+        },
+        {
           "args": [
-            "a_3",
-            "a_3"
+            "a_2",
+            "a_2"
           ],
-          "dest": "a_4",
+          "dest": "a_3",
           "op": "add",
           "type": "int"
         },
         {
           "args": [
-            "m_2"
+            "a_3"
+          ],
+          "dest": "a_0",
+          "op": "id"
+        },
+        {
+          "args": [
+            "a_3"
+          ],
+          "dest": "a_1",
+          "op": "id"
+        },
+        {
+          "args": [
+            "m_0"
           ],
           "labels": [
             "end1",
@@ -49,17 +61,34 @@
           "op": "br"
         },
         {
+          "label": "right"
+        },
+        {
           "args": [
-            "a_3",
-            "a_3"
+            "a_2",
+            "a_2"
           ],
-          "dest": "a_5",
+          "dest": "a_4",
           "op": "mul",
           "type": "int"
         },
         {
           "args": [
-            "m_2"
+            "a_4"
+          ],
+          "dest": "a_0",
+          "op": "id"
+        },
+        {
+          "args": [
+            "a_4"
+          ],
+          "dest": "a_1",
+          "op": "id"
+        },
+        {
+          "args": [
+            "m_0"
           ],
           "labels": [
             "end1",
@@ -68,16 +97,7 @@
           "op": "br"
         },
         {
-          "args": [
-            "a_4",
-            "a_5"
-          ],
-          "dest": "a_0",
-          "labels": [
-            2,
-            3
-          ],
-          "op": "phi"
+          "label": "end1"
         },
         {
           "args": [
@@ -87,17 +107,13 @@
         },
         {
           "args": [
-            "a_4",
-            "a_5",
             "a_0"
           ],
           "dest": "a_1",
-          "labels": [
-            2,
-            3,
-            4
-          ],
-          "op": "phi"
+          "op": "id"
+        },
+        {
+          "label": "end2"
         },
         {
           "args": [

@@ -1,0 +1,265 @@
+{
+  "functions": [
+    {
+      "args": [
+        {
+          "name": "m",
+          "type": "int"
+        },
+        {
+          "name": "n",
+          "type": "int"
+        }
+      ],
+      "instrs": [
+        {
+          "dest": "zero_7",
+          "op": "const",
+          "type": "int",
+          "value": 0
+        },
+        {
+          "dest": "one_8",
+          "op": "const",
+          "type": "int",
+          "value": 1
+        },
+        {
+          "args": [
+            "m_0",
+            "zero_7"
+          ],
+          "dest": "cond_m_9",
+          "op": "eq",
+          "type": "bool"
+        },
+        {
+          "args": [
+            "cond_m_9"
+          ],
+          "labels": [
+            "m_zero",
+            "m_nonzero"
+          ],
+          "op": "br"
+        },
+        {
+          "label": "m_zero"
+        },
+        {
+          "args": [
+            "n_0",
+            "one_8"
+          ],
+          "dest": "tmp_10",
+          "op": "add",
+          "type": "int"
+        },
+        {
+          "args": [
+            "tmp_10"
+          ],
+          "op": "ret"
+        },
+        {
+          "label": "m_nonzero"
+        },
+        {
+          "args": [
+            "n_0",
+            "zero_7"
+          ],
+          "dest": "cond_n_11",
+          "op": "eq",
+          "type": "bool"
+        },
+        {
+          "args": [
+            "cond_n_11"
+          ],
+          "labels": [
+            "n_zero",
+            "n_nonzero"
+          ],
+          "op": "br"
+        },
+        {
+          "label": "n_zero"
+        },
+        {
+          "args": [
+            "m_0",
+            "one_8"
+          ],
+          "dest": "m1_12",
+          "op": "sub",
+          "type": "int"
+        },
+        {
+          "args": [
+            "m1_12",
+            "one_8"
+          ],
+          "dest": "tmp_13",
+          "funcs": [
+            "ack"
+          ],
+          "op": "call",
+          "type": "int"
+        },
+        {
+          "args": [
+            "tmp_13"
+          ],
+          "op": "ret"
+        },
+        {
+          "label": "n_nonzero"
+        },
+        {
+          "args": [
+            "m_0",
+            "one_8"
+          ],
+          "dest": "m1_14",
+          "op": "sub",
+          "type": "int"
+        },
+        {
+          "args": [
+            "n_0",
+            "one_8"
+          ],
+          "dest": "n1_15",
+          "op": "sub",
+          "type": "int"
+        },
+        {
+          "args": [
+            "m_0",
+            "n1_15"
+          ],
+          "dest": "t1_16",
+          "funcs": [
+            "ack"
+          ],
+          "op": "call",
+          "type": "int"
+        },
+        {
+          "args": [
+            "m1_14",
+            "t1_16"
+          ],
+          "dest": "t2_17",
+          "funcs": [
+            "ack"
+          ],
+          "op": "call",
+          "type": "int"
+        },
+        {
+          "args": [
+            "t2_17"
+          ],
+          "op": "ret"
+        },
+        {
+          "args": [
+            "m_0",
+            "n_0"
+          ],
+          "dest": "tmp_6",
+          "funcs": [
+            "ack"
+          ],
+          "op": "call",
+          "type": "int"
+        },
+        {
+          "args": [
+            "tmp_6"
+          ],
+          "op": "print"
+        },
+        {
+          "args": [
+            "cond_n_0"
+          ],
+          "dest": "cond_n_0",
+          "op": "id"
+        },
+        {
+          "args": [
+            "m1_0"
+          ],
+          "dest": "m1_1",
+          "op": "id"
+        },
+        {
+          "args": [
+            "n1_0"
+          ],
+          "dest": "n1_2",
+          "op": "id"
+        },
+        {
+          "args": [
+            "t1_0"
+          ],
+          "dest": "t1_3",
+          "op": "id"
+        },
+        {
+          "args": [
+            "t2_0"
+          ],
+          "dest": "t2_4",
+          "op": "id"
+        },
+        {
+          "args": [
+            "tmp_6"
+          ],
+          "dest": "tmp_5",
+          "op": "id"
+        }
+      ],
+      "name": "ack",
+      "type": "int"
+    },
+    {
+      "args": [
+        {
+          "name": "m",
+          "type": "int"
+        },
+        {
+          "name": "n",
+          "type": "int"
+        }
+      ],
+      "instrs": [
+        {
+          "args": [
+            "m",
+            "n"
+          ],
+          "dest": "tmp",
+          "funcs": [
+            "ack"
+          ],
+          "op": "call",
+          "type": "int"
+        },
+        {
+          "args": [
+            "tmp"
+          ],
+          "op": "print"
+        }
+      ],
+      "name": "main"
+    }
+  ]
+}

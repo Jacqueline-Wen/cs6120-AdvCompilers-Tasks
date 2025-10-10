@@ -1,0 +1,45 @@
+{
+  "functions": [
+    {
+      "instrs": [
+        {
+          "dest": "x_0",
+          "op": "const",
+          "type": "int",
+          "value": 4
+        },
+        {
+          "args": [
+            "x_0"
+          ],
+          "dest": "copy1_1",
+          "op": "id",
+          "type": "int"
+        },
+        {
+          "args": [
+            "copy1_1"
+          ],
+          "dest": "copy2_2",
+          "op": "id",
+          "type": "int"
+        },
+        {
+          "args": [
+            "copy2_2"
+          ],
+          "dest": "copy3_3",
+          "op": "id",
+          "type": "int"
+        },
+        {
+          "args": [
+            "copy3_3"
+          ],
+          "op": "print"
+        }
+      ],
+      "name": "main"
+    }
+  ]
+}

@@ -1,0 +1,278 @@
+{
+  "functions": [
+    {
+      "args": [
+        {
+          "name": "input",
+          "type": "float"
+        }
+      ],
+      "instrs": [
+        {
+          "args": [
+            "input_0"
+          ],
+          "dest": "v0_10",
+          "op": "id",
+          "type": "float"
+        },
+        {
+          "args": [
+            "v0_10"
+          ],
+          "dest": "n_11",
+          "op": "id",
+          "type": "float"
+        },
+        {
+          "dest": "v1_12",
+          "op": "const",
+          "type": "float",
+          "value": 0
+        },
+        {
+          "args": [
+            "v1_12"
+          ],
+          "dest": "sum_13",
+          "op": "id",
+          "type": "float"
+        },
+        {
+          "dest": "v3_14",
+          "op": "const",
+          "type": "float",
+          "value": 1
+        },
+        {
+          "args": [
+            "v3_14"
+          ],
+          "dest": "i_15",
+          "op": "id",
+          "type": "float"
+        },
+        {
+          "args": [
+            "i_15"
+          ],
+          "dest": "i_0",
+          "op": "id"
+        },
+        {
+          "args": [
+            "sum_13"
+          ],
+          "dest": "sum_1",
+          "op": "id"
+        },
+        {
+          "args": [
+            "v10_0"
+          ],
+          "dest": "v10_2",
+          "op": "id"
+        },
+        {
+          "args": [
+            "v11_0"
+          ],
+          "dest": "v11_3",
+          "op": "id"
+        },
+        {
+          "args": [
+            "v12_0"
+          ],
+          "dest": "v12_4",
+          "op": "id"
+        },
+        {
+          "args": [
+            "v13_0"
+          ],
+          "dest": "v13_5",
+          "op": "id"
+        },
+        {
+          "args": [
+            "v14_0"
+          ],
+          "dest": "v14_6",
+          "op": "id"
+        },
+        {
+          "args": [
+            "v7_0"
+          ],
+          "dest": "v7_7",
+          "op": "id"
+        },
+        {
+          "args": [
+            "v8_0"
+          ],
+          "dest": "v8_8",
+          "op": "id"
+        },
+        {
+          "args": [
+            "v9_0"
+          ],
+          "dest": "v9_9",
+          "op": "id"
+        },
+        {
+          "label": "for.cond.2"
+        },
+        {
+          "args": [
+            "i_0"
+          ],
+          "dest": "v4_16",
+          "op": "id",
+          "type": "float"
+        },
+        {
+          "args": [
+            "n_11"
+          ],
+          "dest": "v5_17",
+          "op": "id",
+          "type": "float"
+        },
+        {
+          "args": [
+            "v4_16",
+            "v5_17"
+          ],
+          "dest": "v6_18",
+          "op": "fle",
+          "type": "bool"
+        },
+        {
+          "args": [
+            "v6_18"
+          ],
+          "labels": [
+            "for.body.2",
+            "for.end.2"
+          ],
+          "op": "br"
+        },
+        {
+          "label": "for.body.2"
+        },
+        {
+          "args": [
+            "sum_1"
+          ],
+          "dest": "v7_19",
+          "op": "id",
+          "type": "float"
+        },
+        {
+          "dest": "v8_20",
+          "op": "const",
+          "type": "float",
+          "value": 1
+        },
+        {
+          "args": [
+            "i_0"
+          ],
+          "dest": "v9_21",
+          "op": "id",
+          "type": "float"
+        },
+        {
+          "args": [
+            "v8_20",
+            "v9_21"
+          ],
+          "dest": "v10_22",
+          "op": "fdiv",
+          "type": "float"
+        },
+        {
+          "args": [
+            "v7_19",
+            "v10_22"
+          ],
+          "dest": "v11_23",
+          "op": "fadd",
+          "type": "float"
+        },
+        {
+          "args": [
+            "v11_23"
+          ],
+          "dest": "sum_24",
+          "op": "id",
+          "type": "float"
+        },
+        {
+          "args": [
+            "i_0"
+          ],
+          "dest": "v12_25",
+          "op": "id",
+          "type": "float"
+        },
+        {
+          "dest": "v13_26",
+          "op": "const",
+          "type": "float",
+          "value": 1
+        },
+        {
+          "args": [
+            "v12_25",
+            "v13_26"
+          ],
+          "dest": "v14_27",
+          "op": "fadd",
+          "type": "float"
+        },
+        {
+          "args": [
+            "v14_27"
+          ],
+          "dest": "i_28",
+          "op": "id",
+          "type": "float"
+        },
+        {
+          "labels": [
+            "for.cond.2"
+          ],
+          "op": "jmp"
+        },
+        {
+          "label": "for.end.2"
+        },
+        {
+          "args": [
+            "sum_1"
+          ],
+          "dest": "v15_29",
+          "op": "id",
+          "type": "float"
+        },
+        {
+          "args": [
+            "v15_29"
+          ],
+          "op": "print"
+        },
+        {
+          "dest": "v16_30",
+          "op": "const",
+          "type": "int",
+          "value": 0
+        }
+      ],
+      "name": "main"
+    }
+  ]
+}

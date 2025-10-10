@@ -1,0 +1,308 @@
+{
+  "functions": [
+    {
+      "args": [
+        {
+          "name": "input",
+          "type": "int"
+        }
+      ],
+      "instrs": [
+        {
+          "dest": "zero_8",
+          "op": "const",
+          "type": "int",
+          "value": 0
+        },
+        {
+          "dest": "one_9",
+          "op": "const",
+          "type": "int",
+          "value": 1
+        },
+        {
+          "dest": "neg_one_10",
+          "op": "const",
+          "type": "int",
+          "value": -1
+        },
+        {
+          "args": [
+            "input_0"
+          ],
+          "dest": "vals_11",
+          "op": "alloc",
+          "type": {
+            "ptr": "int"
+          }
+        },
+        {
+          "args": [
+            "vals_11",
+            "zero_8"
+          ],
+          "op": "store"
+        },
+        {
+          "args": [
+            "vals_11",
+            "one_9"
+          ],
+          "dest": "vals_i_12",
+          "op": "ptradd",
+          "type": {
+            "ptr": "int"
+          }
+        },
+        {
+          "args": [
+            "vals_i_12",
+            "one_9"
+          ],
+          "op": "store"
+        },
+        {
+          "dest": "i_13",
+          "op": "const",
+          "type": "int",
+          "value": 2
+        },
+        {
+          "args": [
+            "i_13",
+            "neg_one_10"
+          ],
+          "dest": "i_minus_one_14",
+          "op": "add",
+          "type": "int"
+        },
+        {
+          "args": [
+            "i_minus_one_14",
+            "neg_one_10"
+          ],
+          "dest": "i_minus_two_15",
+          "op": "add",
+          "type": "int"
+        },
+        {
+          "args": [
+            "i_13"
+          ],
+          "dest": "i_0",
+          "op": "id"
+        },
+        {
+          "args": [
+            "i_minus_one_14"
+          ],
+          "dest": "i_minus_one_1",
+          "op": "id"
+        },
+        {
+          "args": [
+            "i_minus_two_15"
+          ],
+          "dest": "i_minus_two_2",
+          "op": "id"
+        },
+        {
+          "args": [
+            "tmp_0"
+          ],
+          "dest": "tmp_3",
+          "op": "id"
+        },
+        {
+          "args": [
+            "tmp2_0"
+          ],
+          "dest": "tmp2_4",
+          "op": "id"
+        },
+        {
+          "args": [
+            "vals_i_12"
+          ],
+          "dest": "vals_i_5",
+          "op": "id"
+        },
+        {
+          "args": [
+            "vals_i_minus_one_0"
+          ],
+          "dest": "vals_i_minus_one_6",
+          "op": "id"
+        },
+        {
+          "args": [
+            "vals_i_minus_two_0"
+          ],
+          "dest": "vals_i_minus_two_7",
+          "op": "id"
+        },
+        {
+          "label": "loop"
+        },
+        {
+          "args": [
+            "i_0",
+            "input_0"
+          ],
+          "dest": "cond_16",
+          "op": "lt",
+          "type": "bool"
+        },
+        {
+          "args": [
+            "cond_16"
+          ],
+          "labels": [
+            "body",
+            "done"
+          ],
+          "op": "br"
+        },
+        {
+          "label": "body"
+        },
+        {
+          "args": [
+            "vals_11",
+            "i_0"
+          ],
+          "dest": "vals_i_17",
+          "op": "ptradd",
+          "type": {
+            "ptr": "int"
+          }
+        },
+        {
+          "args": [
+            "vals_11",
+            "i_minus_one_1"
+          ],
+          "dest": "vals_i_minus_one_18",
+          "op": "ptradd",
+          "type": {
+            "ptr": "int"
+          }
+        },
+        {
+          "args": [
+            "vals_11",
+            "i_minus_two_2"
+          ],
+          "dest": "vals_i_minus_two_19",
+          "op": "ptradd",
+          "type": {
+            "ptr": "int"
+          }
+        },
+        {
+          "args": [
+            "vals_i_minus_one_18"
+          ],
+          "dest": "tmp_20",
+          "op": "load",
+          "type": "int"
+        },
+        {
+          "args": [
+            "vals_i_minus_two_19"
+          ],
+          "dest": "tmp2_21",
+          "op": "load",
+          "type": "int"
+        },
+        {
+          "args": [
+            "tmp_20",
+            "tmp2_21"
+          ],
+          "dest": "tmp_22",
+          "op": "add",
+          "type": "int"
+        },
+        {
+          "args": [
+            "vals_i_17",
+            "tmp_22"
+          ],
+          "op": "store"
+        },
+        {
+          "args": [
+            "i_0",
+            "one_9"
+          ],
+          "dest": "i_23",
+          "op": "add",
+          "type": "int"
+        },
+        {
+          "args": [
+            "i_minus_one_1",
+            "one_9"
+          ],
+          "dest": "i_minus_one_24",
+          "op": "add",
+          "type": "int"
+        },
+        {
+          "args": [
+            "i_minus_two_2",
+            "one_9"
+          ],
+          "dest": "i_minus_two_25",
+          "op": "add",
+          "type": "int"
+        },
+        {
+          "labels": [
+            "loop"
+          ],
+          "op": "jmp"
+        },
+        {
+          "label": "done"
+        },
+        {
+          "args": [
+            "vals_11",
+            "i_minus_one_1"
+          ],
+          "dest": "last_26",
+          "op": "ptradd",
+          "type": {
+            "ptr": "int"
+          }
+        },
+        {
+          "args": [
+            "last_26"
+          ],
+          "dest": "tmp_27",
+          "op": "load",
+          "type": "int"
+        },
+        {
+          "args": [
+            "tmp_27"
+          ],
+          "op": "print"
+        },
+        {
+          "args": [
+            "vals_11"
+          ],
+          "op": "free"
+        },
+        {
+          "op": "ret"
+        }
+      ],
+      "name": "main"
+    }
+  ]
+}

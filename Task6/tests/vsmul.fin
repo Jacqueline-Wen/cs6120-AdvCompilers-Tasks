@@ -1,0 +1,673 @@
+{
+  "functions": [
+    {
+      "args": [
+        {
+          "name": "seq",
+          "type": {
+            "ptr": "int"
+          }
+        },
+        {
+          "name": "max",
+          "type": "int"
+        }
+      ],
+      "instrs": [
+        {
+          "dest": "a_16",
+          "op": "const",
+          "type": "int",
+          "value": 25214903917
+        },
+        {
+          "dest": "c_17",
+          "op": "const",
+          "type": "int",
+          "value": 11
+        },
+        {
+          "dest": "m_18",
+          "op": "const",
+          "type": "int",
+          "value": 281474976710656
+        },
+        {
+          "args": [
+            "seq_0"
+          ],
+          "dest": "x_19",
+          "op": "load",
+          "type": "int"
+        },
+        {
+          "args": [
+            "a_16",
+            "x_19"
+          ],
+          "dest": "ax_20",
+          "op": "mul",
+          "type": "int"
+        },
+        {
+          "args": [
+            "ax_20",
+            "c_17"
+          ],
+          "dest": "axpc_21",
+          "op": "add",
+          "type": "int"
+        },
+        {
+          "args": [
+            "axpc_21",
+            "m_18"
+          ],
+          "dest": "next_22",
+          "op": "div",
+          "type": "int"
+        },
+        {
+          "args": [
+            "next_22",
+            "m_18"
+          ],
+          "dest": "next_23",
+          "op": "mul",
+          "type": "int"
+        },
+        {
+          "args": [
+            "axpc_21",
+            "next_23"
+          ],
+          "dest": "next_24",
+          "op": "sub",
+          "type": "int"
+        },
+        {
+          "args": [
+            "seq_0",
+            "next_24"
+          ],
+          "op": "store"
+        },
+        {
+          "args": [
+            "next_24",
+            "max_11"
+          ],
+          "dest": "val_25",
+          "op": "div",
+          "type": "int"
+        },
+        {
+          "args": [
+            "val_25",
+            "max_11"
+          ],
+          "dest": "val_26",
+          "op": "mul",
+          "type": "int"
+        },
+        {
+          "args": [
+            "next_24",
+            "val_26"
+          ],
+          "dest": "val_27",
+          "op": "sub",
+          "type": "int"
+        },
+        {
+          "args": [
+            "val_27"
+          ],
+          "op": "ret"
+        },
+        {
+          "args": [
+            "size_0"
+          ],
+          "dest": "arr_9",
+          "op": "alloc",
+          "type": {
+            "ptr": "int"
+          }
+        },
+        {
+          "dest": "i_10",
+          "op": "const",
+          "type": "int",
+          "value": 0
+        },
+        {
+          "dest": "max_11",
+          "op": "const",
+          "type": "int",
+          "value": 1000
+        },
+        {
+          "dest": "one_12",
+          "op": "const",
+          "type": "int",
+          "value": 1
+        },
+        {
+          "args": [
+            "i_10"
+          ],
+          "dest": "i_0",
+          "op": "id"
+        },
+        {
+          "args": [
+            "loc_0"
+          ],
+          "dest": "loc_1",
+          "op": "id"
+        },
+        {
+          "args": [
+            "val_0"
+          ],
+          "dest": "val_3",
+          "op": "id"
+        },
+        {
+          "label": "loop"
+        },
+        {
+          "args": [
+            "i_0",
+            "size_0"
+          ],
+          "dest": "cond_13",
+          "op": "lt",
+          "type": "bool"
+        },
+        {
+          "args": [
+            "cond_13"
+          ],
+          "labels": [
+            "body",
+            "done"
+          ],
+          "op": "br"
+        },
+        {
+          "label": "body"
+        },
+        {
+          "args": [
+            "rng_6",
+            "max_11"
+          ],
+          "dest": "val_14",
+          "funcs": [
+            "rand"
+          ],
+          "op": "call",
+          "type": "int"
+        },
+        {
+          "args": [
+            "arr_9",
+            "i_0"
+          ],
+          "dest": "loc_15",
+          "op": "ptradd",
+          "type": {
+            "ptr": "int"
+          }
+        },
+        {
+          "args": [
+            "loc_15",
+            "val_14"
+          ],
+          "op": "store"
+        },
+        {
+          "label": "loop_end"
+        },
+        {
+          "args": [
+            "i_0",
+            "one_12"
+          ],
+          "dest": "i_28",
+          "op": "add",
+          "type": "int"
+        },
+        {
+          "labels": [
+            "loop"
+          ],
+          "op": "jmp"
+        },
+        {
+          "label": "done"
+        },
+        {
+          "args": [
+            "arr_9"
+          ],
+          "op": "ret"
+        },
+        {
+          "dest": "two_5",
+          "op": "const",
+          "type": "int",
+          "value": 2
+        },
+        {
+          "args": [
+            "seed_0"
+          ],
+          "dest": "rng_6",
+          "op": "alloc",
+          "type": {
+            "ptr": "int"
+          }
+        },
+        {
+          "args": [
+            "rng_6",
+            "seed_0"
+          ],
+          "op": "store"
+        },
+        {
+          "args": [
+            "size_0",
+            "rng_6"
+          ],
+          "dest": "arr_7",
+          "funcs": [
+            "randarray"
+          ],
+          "op": "call",
+          "type": {
+            "ptr": "int"
+          }
+        },
+        {
+          "dest": "i_8",
+          "op": "const",
+          "type": "int",
+          "value": 0
+        },
+        {
+          "label": "loop"
+        },
+        {
+          "args": [
+            "i_8",
+            "size_0"
+          ],
+          "dest": "cond_29",
+          "op": "lt",
+          "type": "bool"
+        },
+        {
+          "args": [
+            "loc_0"
+          ],
+          "dest": "loc_2",
+          "op": "id"
+        },
+        {
+          "args": [
+            "val_0"
+          ],
+          "dest": "val_4",
+          "op": "id"
+        },
+        {
+          "args": [
+            "cond_29"
+          ],
+          "labels": [
+            "body",
+            "done"
+          ],
+          "op": "br"
+        },
+        {
+          "label": "body"
+        },
+        {
+          "args": [
+            "arr_7",
+            "i_8"
+          ],
+          "dest": "loc_30",
+          "op": "ptradd",
+          "type": {
+            "ptr": "int"
+          }
+        },
+        {
+          "args": [
+            "loc_30"
+          ],
+          "dest": "val_31",
+          "op": "load",
+          "type": "int"
+        },
+        {
+          "args": [
+            "val_31",
+            "two_5"
+          ],
+          "dest": "val_32",
+          "op": "mul",
+          "type": "int"
+        },
+        {
+          "args": [
+            "loc_30",
+            "val_32"
+          ],
+          "op": "store"
+        },
+        {
+          "args": [
+            "loc_30"
+          ],
+          "dest": "loc_2",
+          "op": "id"
+        },
+        {
+          "args": [
+            "val_32"
+          ],
+          "dest": "val_4",
+          "op": "id"
+        },
+        {
+          "label": "done"
+        },
+        {
+          "args": [
+            "arr_7"
+          ],
+          "op": "free"
+        },
+        {
+          "args": [
+            "rng_6"
+          ],
+          "op": "free"
+        }
+      ],
+      "name": "rand",
+      "type": "int"
+    },
+    {
+      "args": [
+        {
+          "name": "size",
+          "type": "int"
+        },
+        {
+          "name": "rng",
+          "type": {
+            "ptr": "int"
+          }
+        }
+      ],
+      "instrs": [
+        {
+          "args": [
+            "size"
+          ],
+          "dest": "arr",
+          "op": "alloc",
+          "type": {
+            "ptr": "int"
+          }
+        },
+        {
+          "dest": "i",
+          "op": "const",
+          "type": "int",
+          "value": 0
+        },
+        {
+          "dest": "max",
+          "op": "const",
+          "type": "int",
+          "value": 1000
+        },
+        {
+          "dest": "one",
+          "op": "const",
+          "type": "int",
+          "value": 1
+        },
+        {
+          "label": "loop"
+        },
+        {
+          "args": [
+            "i",
+            "size"
+          ],
+          "dest": "cond",
+          "op": "lt",
+          "type": "bool"
+        },
+        {
+          "args": [
+            "cond"
+          ],
+          "labels": [
+            "body",
+            "done"
+          ],
+          "op": "br"
+        },
+        {
+          "label": "body"
+        },
+        {
+          "args": [
+            "rng",
+            "max"
+          ],
+          "dest": "val",
+          "funcs": [
+            "rand"
+          ],
+          "op": "call",
+          "type": "int"
+        },
+        {
+          "args": [
+            "arr",
+            "i"
+          ],
+          "dest": "loc",
+          "op": "ptradd",
+          "type": {
+            "ptr": "int"
+          }
+        },
+        {
+          "args": [
+            "loc",
+            "val"
+          ],
+          "op": "store"
+        },
+        {
+          "label": "loop_end"
+        },
+        {
+          "args": [
+            "i",
+            "one"
+          ],
+          "dest": "i",
+          "op": "add",
+          "type": "int"
+        },
+        {
+          "labels": [
+            "loop"
+          ],
+          "op": "jmp"
+        },
+        {
+          "label": "done"
+        },
+        {
+          "args": [
+            "arr"
+          ],
+          "op": "ret"
+        }
+      ],
+      "name": "randarray",
+      "type": {
+        "ptr": "int"
+      }
+    },
+    {
+      "args": [
+        {
+          "name": "size",
+          "type": "int"
+        },
+        {
+          "name": "seed",
+          "type": "int"
+        }
+      ],
+      "instrs": [
+        {
+          "dest": "two",
+          "op": "const",
+          "type": "int",
+          "value": 2
+        },
+        {
+          "args": [
+            "seed"
+          ],
+          "dest": "rng",
+          "op": "alloc",
+          "type": {
+            "ptr": "int"
+          }
+        },
+        {
+          "args": [
+            "rng",
+            "seed"
+          ],
+          "op": "store"
+        },
+        {
+          "args": [
+            "size",
+            "rng"
+          ],
+          "dest": "arr",
+          "funcs": [
+            "randarray"
+          ],
+          "op": "call",
+          "type": {
+            "ptr": "int"
+          }
+        },
+        {
+          "dest": "i",
+          "op": "const",
+          "type": "int",
+          "value": 0
+        },
+        {
+          "label": "loop"
+        },
+        {
+          "args": [
+            "i",
+            "size"
+          ],
+          "dest": "cond",
+          "op": "lt",
+          "type": "bool"
+        },
+        {
+          "args": [
+            "cond"
+          ],
+          "labels": [
+            "body",
+            "done"
+          ],
+          "op": "br"
+        },
+        {
+          "label": "body"
+        },
+        {
+          "args": [
+            "arr",
+            "i"
+          ],
+          "dest": "loc",
+          "op": "ptradd",
+          "type": {
+            "ptr": "int"
+          }
+        },
+        {
+          "args": [
+            "loc"
+          ],
+          "dest": "val",
+          "op": "load",
+          "type": "int"
+        },
+        {
+          "args": [
+            "val",
+            "two"
+          ],
+          "dest": "val",
+          "op": "mul",
+          "type": "int"
+        },
+        {
+          "args": [
+            "loc",
+            "val"
+          ],
+          "op": "store"
+        },
+        {
+          "label": "done"
+        },
+        {
+          "args": [
+            "arr"
+          ],
+          "op": "free"
+        },
+        {
+          "args": [
+            "rng"
+          ],
+          "op": "free"
+        }
+      ],
+      "name": "main"
+    }
+  ]
+}

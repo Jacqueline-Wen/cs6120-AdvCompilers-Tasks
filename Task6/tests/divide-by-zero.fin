@@ -1,0 +1,39 @@
+{
+  "functions": [
+    {
+      "instrs": [
+        {
+          "label": "entry"
+        },
+        {
+          "dest": "zero_0",
+          "op": "const",
+          "type": "int",
+          "value": 0
+        },
+        {
+          "dest": "one_1",
+          "op": "const",
+          "type": "int",
+          "value": 1
+        },
+        {
+          "args": [
+            "one_1",
+            "zero_0"
+          ],
+          "dest": "baddiv_2",
+          "op": "div",
+          "type": "int"
+        },
+        {
+          "args": [
+            "baddiv_2"
+          ],
+          "op": "print"
+        }
+      ],
+      "name": "main"
+    }
+  ]
+}
