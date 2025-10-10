@@ -9,6 +9,7 @@
 #include <set>
 #include <stack>
 #include <vector>
+#include <unordered_set>
 
 using namespace std;
 using json = nlohmann::json;
@@ -27,7 +28,7 @@ void insertPhiNodes(shared_ptr<BasicBlocks> basicBlocks,
 void renameVariables(shared_ptr<BasicBlocks> basicBlocks,
                      const map<int, set<int>> &dominators);
 void renameBlock(int blockId, shared_ptr<BasicBlocks> basicBlocks,
-                 const map<int, set<int>> &dominators);
+                 const map<int, set<int>> &dominators, unordered_set<int> &visited);
 void processBlockInstructions(int blockId, shared_ptr<BasicBlocks> basicBlocks);
 void popBlockDefinitions(int blockId, shared_ptr<BasicBlocks> basicBlocks);
 vector<int> getDominatedChildren(int blockId,
@@ -167,11 +168,26 @@ void renameVariables(shared_ptr<BasicBlocks> basicBlocks,
         variableStack[varEntry.first].push(varEntry.first + "_0");
     }
 
-    renameBlock(basicBlocks->getMainLabel(), basicBlocks, dominators);
+    unordered_set<int> visited;
+    renameBlock(basicBlocks->getMainLabel(), basicBlocks, dominators, visited);
 }
 
 void renameBlock(int blockId, shared_ptr<BasicBlocks> basicBlocks,
-                 const map<int, set<int>> &dominators) {
+                 const map<int, set<int>> &dominators, unordered_set<int> &visited) {
+
+    if (visited.count(blockId)) return;
+    visited.insert(blockId);
+
+    {
+        const auto &blocks = basicBlocks->getBlocks();
+        const auto &orig = blocks.at(blockId);
+        if (!orig.empty() && orig.front().contains("label")) {
+            if (ssaInstructions[blockId].empty()) {
+                ssaInstructions[blockId].push_back(orig.front());
+            }
+        }
+    }
+
     // Process phi-nodes in this block first
     auto phiIt = phiNodes.find(blockId);
     if (phiIt != phiNodes.end()) {
@@ -214,7 +230,7 @@ void renameBlock(int blockId, shared_ptr<BasicBlocks> basicBlocks,
 
     // Process dominated children
     for (int child : getDominatedChildren(blockId, dominators)) {
-        renameBlock(child, basicBlocks, dominators);
+        renameBlock(child, basicBlocks, dominators, visited);
     }
 
     // Pop variables defined in this block
@@ -229,7 +245,9 @@ void processBlockInstructions(int blockId,
     for (const auto &instr : instructions) {
         if (!instr.contains("op")) {
             if (instr.contains("label")) {
-                ssaInstructions[blockId].push_back(instr);
+                if (ssaInstructions[blockId].empty()){
+                    ssaInstructions[blockId].push_back(instr);
+                }
             }
             continue;
         }
@@ -401,6 +419,36 @@ void insertCopyInPred(int predId, const string &dest, const string &src) {
     vec.insert(vec.begin() + pos, copy);
 }
 
+// Compute immediate dominator for each block from full dominator sets.
+// Assumes 'entry' is the function entry block id.
+static map<int,int> compute_idom(const map<int,set<int>>& dom, int entry) {
+    map<int,int> idom;
+    for (auto& [b, ds] : dom) {
+        if (b == entry) { idom[b] = entry; continue; }
+        // idom(b) = unique d in Dom(b)\{b} that doesn't strictly dominate any other candidate
+        int best = -1;
+        for (int d : ds) if (d != b) {
+            bool dominated_by_another_candidate = false;
+            for (int e : ds) if (e != b && e != d) {
+                // e dominates d ?
+                if (dom.at(d).count(e)) { dominated_by_another_candidate = true; break; }
+            }
+            if (!dominated_by_another_candidate) { best = d; break; }
+        }
+        // Fallback (shouldn't happen if dom is valid): pick any predecessor in ds
+        idom[b] = (best == -1 ? entry : best);
+    }
+    return idom;
+}
+
+static vector<int> idom_children_of(int b, const map<int,int>& idom) {
+    vector<int> out;
+    for (auto& [n, p] : idom) {
+        if (n != b && p == b) out.push_back(n);
+    }
+    return out;
+}
+
 void convertFromSSA(shared_ptr<BasicBlocks> basicBlocks) {
     // cout << "\n===Converting out of SSA (eliminating the phis)==="<<endl;
     auto blocks = basicBlocks->getBlocks();
@@ -427,6 +475,7 @@ void convertFromSSA(shared_ptr<BasicBlocks> basicBlocks) {
             for (size_t k = 0; k < labels.size(); ++k) {
                 int predId = labels[k];
                 string src = args[k];
+                if (src.empty()) continue;
                 insertCopyInPred(predId, dest, src);
             }
         }
