@@ -5,7 +5,7 @@ Serena Zhang (syz8), Maggie Gao (mg2447), Jacqueline Wen (jw2347)
 
 ## Pass
 We were honestly less ambitious for this task due to all of our group members having upcoming prelims. 
-For our pass, we implemented a divide by 0 duct tape fix, where every time we encountered a divide by 0, we would replace it with a divide by 1. Additionally, when divide by 0 is encountered, we would print a message indicating so. Although this code is not practical in most ways and it would make production code more difficult to fix, implementing this pass helped us gain an understanding on how to use llvm. 
+For our pass, we implemented a divide by 0 duct tap fix, where every time we encountered a divide by 0, we would replace it with a divide by 1. Additionally, when divide by 0 is encountered, we would print a message indicating so. Although this code is not practical in most ways and it would make production code more difficult to fix, implementing this pass helped us gain an understanding on how to use llvm. 
 
 ## Testing
 For testing, we manually tested against both cases where we had divide by 0, and cases where we did not, and manually verified that the results matched our expectations. 
