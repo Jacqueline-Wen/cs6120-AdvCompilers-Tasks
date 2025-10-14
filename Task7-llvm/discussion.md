@@ -13,7 +13,7 @@ For testing, we manually tested against both cases where we had divide by 0, and
 ## Hardest Part + Gen AI Usage
 The hardest part of this project was finding the correct syntax for llvm functions. 
 
-For this assignment, we used ChatGPT to look up documentaton for how we would write various llvm functions. It was mostly useful, except for the times where we would be too lazy to explain context in a chat and the agent would misinterpret our rather ambiguous nessages.   
+For this assignment, we used ChatGPT to look up documentaton for how we would write various llvm functions. It was mostly useful, except for the times where we would be too lazy to explain context in a chat and the agent would misinterpret our rather ambiguous messages.   
 
 ## Michelin Star
 We believe we deserve a michilin star for implementing our (although basic) LLVM pass, which meets the requirement specified. 
