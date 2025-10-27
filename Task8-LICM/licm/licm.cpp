@@ -2,8 +2,8 @@
 #include "llvm/Analysis/ValueTracking.h"
 #include "llvm/IR/IRBuilder.h"
 #include "llvm/IR/InstrTypes.h"
-#include "llvm/IR/Module.h"
 #include "llvm/IR/Instruction.h"
+#include "llvm/IR/Module.h"
 #include "llvm/Pass.h"
 #include "llvm/Passes/PassBuilder.h"
 #include "llvm/Passes/PassPlugin.h"
@@ -17,47 +17,65 @@ namespace {
 struct LICMPass : public PassInfoMixin<LICMPass> {
     // use isLoopInvariant()
     // hasLoopInvariantOperands()
-    PreservedAnalyses run(Loop &L, LoopAnalysisManager &LAM,
-                          LoopStandardAnalysisResults &AR, LPMUpdater &U) {
-        errs() << "starting loop\n";
-        BasicBlock *preheader = L.getLoopPreheader();
-        if (!preheader) {
-            errs() << "preheader is equal to null\n";
-            return PreservedAnalyses::none();
-        }
-        std::vector<const Instruction *> lIInstructions;
-        bool notConverged = true;
-        while (notConverged) {
-            notConverged = false;
-            // iterating through basic blocks
-            for (auto *B : L.blocks()) {
-                // iterating through instructions of basic block B
-                for (const auto &I : *B) {
-                    if (L.hasLoopInvariantOperands(&I) &&
-                        L.isLoopInvariant(&I) &&
-                        isSafeToSpeculativelyExecute(&I)) {
-                        errs() << "adding somehting to LIInstr\n";
-                        lIInstructions.push_back(&I);
-                        notConverged = true;
+    PreservedAnalyses run(Module &M, ModuleAnalysisManager &AM) {
+        for (Function &F : M) {
+            if (F.isDeclaration())
+                continue; // skip external functions
+
+            // Setup analysis managers
+            FunctionAnalysisManager FAM;
+            PassBuilder PB;
+            PB.registerFunctionAnalyses(FAM);
+
+            // Get LoopInfo for this function
+            LoopAnalysis::Result &LI = FAM.getResult<LoopAnalysis>(F);
+
+            // Iterate over top-level loops
+            for (Loop *L : LI) {
+                errs() << "starting loop\n";
+                BasicBlock *preheader = L->getLoopPreheader();
+                if (!preheader) {
+                    errs() << "preheader is equal to null\n";
+                    return PreservedAnalyses::none();
+                }
+                std::vector<const Instruction *> lIInstructions;
+                bool notConverged = true;
+                while (notConverged) {
+                    notConverged = false;
+                    // iterating through basic blocks
+                    for (auto *B : L->blocks()) {
+                        // iterating through instructions of basic block B
+                        for (const auto &I : *B) {
+                            if (L->hasLoopInvariantOperands(&I) &&
+                                // L->isLoopInvariant(&I) &&
+                                !I.mayReadOrWriteMemory() &&
+                                isSafeToSpeculativelyExecute(&I)) {
+                                errs() << "adding somehting to LIInstr\n";
+                                lIInstructions.push_back(&I);
+                                notConverged = true;
+                            }
+                        }
                     }
+
+                    for (auto &a : lIInstructions) {
+                        const_cast<Instruction *>(a)->moveBefore(
+                            preheader->getTerminator());
+                        // a->moveBefore(preheader->getTerminator());
+                        // Instruction *mutableInst =
+                        // const_cast<Instruction*>(a);
+                        // mutableInst->moveBefore(preheader->getInstList(),
+                        // preheader->getTerminator()->getIterator());
+                        errs() << "Moving LI: " << *a << "\n";
+                    }
+                    lIInstructions.clear();
                 }
             }
-
-            for (auto &a : lIInstructions) {
-                const_cast<Instruction*>(a)->moveBefore(preheader->getTerminator());
-                // a->moveBefore(preheader->getTerminator());
-                // Instruction *mutableInst = const_cast<Instruction*>(a);
-                // mutableInst->moveBefore(preheader->getInstList(), preheader->getTerminator()->getIterator());
-                errs() << "Moving LI: " << *a << "\n";
-            }
-            lIInstructions.clear();
         }
-
         return PreservedAnalyses::all();
     }
 };
 
-}
+} // namespace
 
 // extern "C" LLVM_ATTRIBUTE_WEAK ::llvm::PassPluginLibraryInfo
 // llvmGetPassPluginInfo() {
@@ -73,21 +91,32 @@ struct LICMPass : public PassInfoMixin<LICMPass> {
 //                     }
 //                     return false;
 //                 }};
+// // }
+// extern "C" LLVM_ATTRIBUTE_WEAK ::llvm::PassPluginLibraryInfo
+// llvmGetPassPluginInfo() {
+//     return {LLVM_PLUGIN_API_VERSION, "LICM pass", "v0.1", [](PassBuilder &PB)
+//     {
+//                 PB.registerPipelineParsingCallback(
+//                     [](StringRef Name, LoopPassManager &LPM,
+//                        ArrayRef<PassBuilder::PipelineElement>) {
+//                         if (Name == "simple-licm") {
+//                             LPM.addPass(LICMPass());
+//                             return true;
+//                         }
+//                         return false;
+//                     });
+//             }};
 // }
+
 extern "C" LLVM_ATTRIBUTE_WEAK ::llvm::PassPluginLibraryInfo
 llvmGetPassPluginInfo() {
-    return {
-        LLVM_PLUGIN_API_VERSION, "LICM pass", "v0.1",
-        [](PassBuilder &PB) {
-            PB.registerPipelineParsingCallback(
-                [](StringRef Name, LoopPassManager &LPM,
-                   ArrayRef<PassBuilder::PipelineElement>) {
-                    if (Name == "simple-licm") {
-                        LPM.addPass(LICMPass());
-                        return true;
-                    }
-                    return false;
-                });
-        }
-    };
+    return {.APIVersion = LLVM_PLUGIN_API_VERSION,
+            .PluginName = "LICM pass",
+            .PluginVersion = "v0.1",
+            .RegisterPassBuilderCallbacks = [](PassBuilder &PB) {
+                PB.registerPipelineStartEPCallback(
+                    [](ModulePassManager &MPM, OptimizationLevel Level) {
+                        MPM.addPass(LICMPass());
+                    });
+            }};
 }
