@@ -20,15 +20,12 @@ struct LICMPass : public PassInfoMixin<LICMPass> {
             if (F.isDeclaration())
                 continue; // skip external functions
 
-            // Setup analysis managers
             FunctionAnalysisManager FAM;
             PassBuilder PB;
             PB.registerFunctionAnalyses(FAM);
 
-            // Get LoopInfo for this function
             LoopAnalysis::Result &LI = FAM.getResult<LoopAnalysis>(F);
 
-            // Iterate over top-level loops
             for (Loop *L : LI) {
                 errs() << "starting loop\n";
                 BasicBlock *preheader = L->getLoopPreheader();
