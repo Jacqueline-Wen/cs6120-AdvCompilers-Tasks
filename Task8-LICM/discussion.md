@@ -11,7 +11,7 @@ Working with LLVM for this assignment was pretty frustrating. Namely, we had to 
 ## Testing
 To first sanity check our code, we write a simple C++ program and compared the intermediate representations with and without the pass. When we manually compared the intermediate representations, we noticed that the optimization was being implemented. 
 
-To more rigorously test our code, we used embench. Here are our results:
+To more rigorously test our code, we used Embench. Here are our results:
 
 | Comparison Type | aha-mont64 | crc32 | cubic | edn | huffbench | matmult-int | md5sum | minver | nbody | nettle-aes | nettle-sha256 | nsichneu | picojpeg | primecount | qrduino | sglib-combined | slre | st | statemate | tarfind | ud | wikisort |
 |-----------------|-------------|--------|--------|-----|------------|--------------|--------|--------|--------|-------------|----------------|-----------|-----------|-------------|----------|-----------------|------|------|------------|----------|------|-----------|
@@ -28,4 +28,4 @@ It seems that we were able to speed up some of the programs with our LICM optimi
 The most challenging part of this assignment was trying to navigate the complexity of LLVM and understanding how its internal analyses interacted. While conceptually the LICM algorithm is straightforward, implementing it in LLVM required careful management. Another challenge was setting up and running Embench for testing. The documentation and benchmarking workflow was initially confusing and took a fair amount of time. However, after much trial and error, we were finally able to get Embench working and collect performance data to test our optimization.
 
 ## Michelin Star
-We believe that we deserve a michelin start for completely the specification of this assignment. Although we didn't see a desirable outcome, we still learned a lot by completing this assignment. 
+We believe that we deserve a michelin star for completely the specification of this assignment. Although we didn't see a desirable outcome, we still learned a lot by completing this assignment. 
