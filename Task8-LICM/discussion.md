@@ -13,30 +13,10 @@ To first sanity check our code, we write a simple C++ program and compared the i
 
 To more rigorously test our code, we used embench. Here are our results:
 
-| Benchmark       | Original Speed | Optimized Speed |
-|-----------------|----------------|-----------------|
-| aha-mont64      | 2.45           | 2.45            |
-| crc32           | 1.95           | 1.94            |
-| cubic           | 191.96         | 190.00          |
-| edn             | 9.23           | 9.57            |
-| huffbench       | 8.28           | 8.33            |
-| matmult-int     | 8.86           | 8.78            |
-| md5sum          | 5.79           | 5.36            |
-| minver          | 29.79          | 29.84           |
-| nbody           | 500.62         | 513.06          |
-| nettle-aes      | 6.29           | 6.11            |
-| nettle-sha256   | 5.81           | 5.78            |
-| nsichneu        | 8.26           | 8.25            |
-| picojpeg        | 10.47          | 10.54           |
-| primecount      | 3.07           | 3.07            |
-| qrduino         | 6.69           | 7.00            |
-| sglib-combined  | 4.33           | 4.57            |
-| slre            | 5.38           | 6.28            |
-| st              | 115.43         | 113.86          |
-| statemate       | 9.62           | 12.81           |
-| tarfind         | 8.87           | 8.88            |
-| ud              | 9.24           | 9.20            |
-| wikisort        | 38.85          | 37.85           |
+| Comparison Type | aha-mont64 | crc32 | cubic | edn | huffbench | matmult-int | md5sum | minver | nbody | nettle-aes | nettle-sha256 | nsichneu | picojpeg | primecount | qrduino | sglib-combined | slre | st | statemate | tarfind | ud | wikisort |
+|-----------------|-------------|--------|--------|-----|------------|--------------|--------|--------|--------|-------------|----------------|-----------|-----------|-------------|----------|-----------------|------|------|------------|----------|------|-----------|
+| Original Speed  | 2.45 | 1.95 | 191.96 | 9.23 | 8.28 | 8.86 | 5.79 | 29.79 | 500.62 | 6.29 | 5.81 | 8.26 | 10.47 | 3.07 | 6.69 | 4.33 | 5.38 | 115.43 | 9.62 | 8.87 | 9.24 | 38.85 |
+| Optimized Speed | 2.45 | 1.94 | 190.00 | 9.57 | 8.33 | 8.78 | 5.36 | 29.84 | 513.06 | 6.11 | 5.78 | 8.25 | 10.54 | 3.07 | 7.00 | 4.57 | 6.28 | 113.86 | 12.81 | 8.88 | 9.20 | 37.85 |
 
 It seems that we were able to speed up some of the programs with our LICM optimization. However, there are also many programs where the speed is unaffected or increased by the optimization. Overall, we observed no substantial results with embench. Perhaps more loop optimizations are necessary for obvious speedups in programs. 
 
