@@ -6,6 +6,8 @@ Serena Zhang (syz8), Maggie Gao (mg2447), Jacqueline Wen (jw2347)
 ## Pass
 For this assignment, we implemented LICM with LLVM. We noticed that LLVM had a lot of pre-built functions, such as `llvm::hasLoopInvariantOperands`, and we used this to make our lives a little easier. We implemented the LICM optimization as decribed on the website using the same skeleton as Task7. 
 
+Working with LLVM for this assignment was pretty frustrating. Namely, we had to juggle dynamically casting between const and non-const instructions (honestly this is pretty terrible C++ coding) as some built in LLVM functions required the parameters to be const, while others did not.  
+
 ## Testing
 
 ## Michelin Star
