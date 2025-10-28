@@ -15,8 +15,6 @@ using namespace llvm;
 namespace {
 
 struct LICMPass : public PassInfoMixin<LICMPass> {
-    // use isLoopInvariant()
-    // hasLoopInvariantOperands()
     PreservedAnalyses run(Module &M, ModuleAnalysisManager &AM) {
         for (Function &F : M) {
             if (F.isDeclaration())
@@ -60,11 +58,6 @@ struct LICMPass : public PassInfoMixin<LICMPass> {
                     for (auto &a : lIInstructions) {
                         const_cast<Instruction *>(a)->moveBefore(
                             preheader->getTerminator());
-                        // a->moveBefore(preheader->getTerminator());
-                        // Instruction *mutableInst =
-                        // const_cast<Instruction*>(a);
-                        // mutableInst->moveBefore(preheader->getInstList(),
-                        // preheader->getTerminator()->getIterator());
                         errs() << "Moving LI: " << *a << "\n";
                     }
                     lIInstructions.clear();
@@ -76,37 +69,6 @@ struct LICMPass : public PassInfoMixin<LICMPass> {
 };
 
 } // namespace
-
-// extern "C" LLVM_ATTRIBUTE_WEAK ::llvm::PassPluginLibraryInfo
-// llvmGetPassPluginInfo() {
-//     return {.APIVersion = LLVM_PLUGIN_API_VERSION,
-//             .PluginName = "LIC pass",
-//             .PluginVersion = "v0.1",
-//             .RegisterPassBuilderCallbacks =
-//                 [](StringRef Name, LoopPassManager &LPM,
-//                    ArrayRef<PassBuilder::PipelineElement>) {
-//                     if (Name == "simple-licm") {
-//                         LPM.addPass(LICMPass());
-//                         return true;
-//                     }
-//                     return false;
-//                 }};
-// // }
-// extern "C" LLVM_ATTRIBUTE_WEAK ::llvm::PassPluginLibraryInfo
-// llvmGetPassPluginInfo() {
-//     return {LLVM_PLUGIN_API_VERSION, "LICM pass", "v0.1", [](PassBuilder &PB)
-//     {
-//                 PB.registerPipelineParsingCallback(
-//                     [](StringRef Name, LoopPassManager &LPM,
-//                        ArrayRef<PassBuilder::PipelineElement>) {
-//                         if (Name == "simple-licm") {
-//                             LPM.addPass(LICMPass());
-//                             return true;
-//                         }
-//                         return false;
-//                     });
-//             }};
-// }
 
 extern "C" LLVM_ATTRIBUTE_WEAK ::llvm::PassPluginLibraryInfo
 llvmGetPassPluginInfo() {
