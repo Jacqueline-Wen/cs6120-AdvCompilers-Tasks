@@ -1,0 +1,8 @@
+{
+	"InstallScripts" : 
+	[
+		"/Users/sz/Desktop/CS 6120/cs6120-AdvCompilers-Tasks/Task8-LICM/build/cmake_install.cmake",
+		"/Users/sz/Desktop/CS 6120/cs6120-AdvCompilers-Tasks/Task8-LICM/build/licm/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
