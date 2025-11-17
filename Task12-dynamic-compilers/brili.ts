@@ -1,6 +1,9 @@
 import * as bril from "./bril-ts/bril.ts";
 import { readStdin, unreachable } from "./bril-ts/util.ts";
 
+let traceCount = 0;
+const traceMaxCount = 10;
+
 /**
  * An interpreter error to print to the console.
  */
@@ -446,6 +449,12 @@ function evalCall(instr: bril.Operation, state: State): Action {
  * instruction or "end" to terminate the function.
  */
 function evalInstr(instr: bril.Instruction, state: State): Action {
+    // record trace
+    if (traceCount < traceMaxCount) {
+        console.log(JSON.stringify(instr));
+        traceCount += 1;
+    }
+
     state.icount += BigInt(1);
 
     // Check that we have the right number of arguments.
