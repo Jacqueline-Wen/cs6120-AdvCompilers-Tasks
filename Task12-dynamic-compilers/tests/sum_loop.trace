@@ -1,0 +1,11 @@
+{"dest":"i","op":"const","type":"int","value":0}
+{"dest":"s","op":"const","type":"int","value":0}
+{"dest":"one","op":"const","type":"int","value":1}
+{"args":["i","n"],"dest":"cond","op":"lt","type":"bool"}
+{"args":["cond"],"labels":["body","end"],"op":"br"}
+{"args":["s","i"],"dest":"s","op":"add","type":"int"}
+{"args":["i","one"],"dest":"i","op":"add","type":"int"}
+{"labels":["loop"],"op":"jmp"}
+{"args":["i","n"],"dest":"cond","op":"lt","type":"bool"}
+{"args":["cond"],"labels":["body","end"],"op":"br"}
+10

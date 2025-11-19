@@ -19,19 +19,12 @@ struct Trace
     int lastOffset;
 };
 
-// process raw trace file
+// processing the trace file
 Trace getTrace(string trace_f, unordered_map<string, vector<json>> func_args)
 {
     Trace t;
     auto &trace = t.trace;
-
-    // open trace
     ifstream trace_raw(trace_f);
-    if (!trace_raw)
-    {
-        cerr << "ERROR: Could not open trace " << trace_f << endl;
-        return t;
-    }
 
     string line;
     stack<pair<string, string>> ret_dest;
@@ -128,27 +121,16 @@ Trace getTrace(string trace_f, unordered_map<string, vector<json>> func_args)
     return t;
 }
 
-void printTrace(Trace t)
-{
-    cout << "\nGOT TRACE:" << endl;
-    for (auto &cur : t.trace)
-    {
-        cout << cur << endl;
-    }
-    cout << "last data: " << t.lastLabel << " " << t.lastOffset << "\n"
-         << endl;
-}
-
 void insertTrace(json &func, Trace t)
 {
     auto &original_instrs = func["instrs"];
     auto &trace = t.trace;
 
-    // 1. Insert hot path (t.trace) at the beginning of the function
+    // Insert hot path (t.trace) at the beginning of the function
     auto &instrs_vec = original_instrs.get_ref<std::vector<json> &>();
     instrs_vec.insert(instrs_vec.begin(), trace.begin(), trace.end());
 
-    // 2. SIMPLE VERSION: Always insert trace_sucess label right after the trace.
+    // insert trace_sucess label right after the trace.
     json trace_success = {
         {"label", "trace_sucess"}
     };
@@ -162,23 +144,22 @@ int main(int argc, char *argv[])
     auto trace_file = argv[2];
 
     json j;
+    ifstream input(json_file);
+    if (!input)
+    {
+        cerr << "ERROR - Unable to open:" << json_file << "\n";
+        return 1;
+    }
     try
     {
-        ifstream input(json_file);
-        if (!input)
-        {
-            cerr << "ERROR: Could not open file " << json_file << "\n";
-            return 1;
-        }
         input >> j;
     }
     catch (const json::parse_error &e)
     {
-        cerr << "ERROR: Failed to parse Bril JSON from file, " << e.what() << endl;
+        cerr << "ERROR - Unable to parse: " << e.what() << endl;
         return 1;
     }
 
-    // get function args
     unordered_map<string, vector<json>> func_args;
     for (auto &func : j["functions"])
     {

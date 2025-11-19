@@ -1,0 +1,11 @@
+{"op":"speculate"}
+{"dest":"zero","op":"const","type":"int","value":0}
+{"dest":"ten","op":"const","type":"int","value":10}
+{"dest":"sum","op":"const","type":"int","value":0}
+{"args":["input"],"dest":"n","op":"id","type":"int"}
+{"dest":"ten","op":"const","type":"int","value":10}
+{"dest":"zero","op":"const","type":"int","value":0}
+{"dest":"one","op":"const","type":"int","value":1}
+{"args":["n","ten"],"dest":"div","op":"div","type":"int"}
+{"args":["div","zero"],"dest":"cond","op":"eq","type":"bool"}
+true
