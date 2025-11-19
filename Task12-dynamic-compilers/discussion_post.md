@@ -14,7 +14,7 @@ For each test, we created four versions in the directory:
 3. `*_opt.json`: the optimized Bril program produced by `trace.cpp`
 4. `*_opt.trace`: the trace of the optimized program, which was ran with the same inputs as the original.
 
-In each case, we can the original (`*.trace`) and optimized (`*_opt.trace`) traces and confirm that both versions produce identical printed outputs (booleans or integers, depending on the program), giving us confidence that our optimization preserved the proper semantics of each program.
+In each case, we used the original (`*.trace`) and optimized (`*_opt.trace`) traces to confirm that both versions produce identical printed outputs (booleans or integers, depending on the program), giving us confidence that our optimization preserved the proper semantics of each program.
 
 Here, we have a table comparing the dynamic instructions before and after tracing.
 
