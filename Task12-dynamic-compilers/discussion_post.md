@@ -1,0 +1,27 @@
+**Team Members**
+Serena Zhang (syz8), Maggie Gao (mg2447), Jacqueline Wen (jw2347)
+
+[Source code URL](https://github.com/Jacqueline-Wen/cs6120-AdvCompilers-Tasks/tree/main/Task12-dynamic-compilers)
+
+## Tracing
+
+## Testing
+We evaluated our optimizer on three tests: a custom `sum_loop` bril program and two existing benchmarks from the `core` folder in `bril/benchmarks`: `armstrong` and `sum-divisors`. Our created `sum_loop` program takes an input n and computes the sum of integers from 1 to n - 1. This gives us a simple, loop-heavy test.
+
+For each test, we created four versions in the directory:
+1. `*.json`: the original Bril program in JSON form.
+2. `*.trace`: the execution trace generated from running the JSON program with a chosen input. We used the recommended input form `armstrong` and `sum-divisors`, which are 407 and 100 respectively. For `sum_loop` we used the input 15.
+3. `*_opt.json`: the optimized Bril program produced by `trace.cpp`
+4. `*_opt.trace`: the trace of the optimized program, which was ran with the same inputs as the original.
+
+In each case, we compared the original and optimized traces and confirmed that both versions produced identical printed outputs (booleans or integers, depending on the program), giving us confidence that our optimization preserved the proper semantics of each program.
+
+| Benchmark | Baseline Dynamic Instrs | Traced Dynamic Instrs |
+|---------|----------|----------|
+| sum_loop | 81  | 92 |
+| armstrong | 133  | 144  |
+| sum-divisors | 159  | 167  |
+
+## Hardest Part
+
+## Michelin Star

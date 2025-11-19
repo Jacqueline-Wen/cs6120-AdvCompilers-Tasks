@@ -8,4 +8,4 @@
 {"labels":["loop"],"op":"jmp"}
 {"args":["i","n"],"dest":"cond","op":"lt","type":"bool"}
 {"args":["cond"],"labels":["body","end"],"op":"br"}
-10
+105
