@@ -6,7 +6,7 @@ Serena Zhang (syz8), Maggie Gao (mg2447), Jacqueline Wen (jw2347)
 ## Tracing
 
 ## Testing
-We evaluated our optimizer on three tests: a custom `sum_loop` bril program and two existing benchmarks from the `core` folder in `bril/benchmarks`: `armstrong` and `sum-divisors`. Our created `sum_loop` program takes an input n and computes the sum of integers from 1 to n - 1. This gives us a simple, loop-heavy test.
+We evaluated our trace program on three tests: a custom `sum_loop` bril program and two existing benchmarks from the `core` folder in `bril/benchmarks`: `armstrong` and `sum-divisors`. Our created `sum_loop` program takes an input n and computes the sum of integers from 1 to n - 1. This gives us a simple, loop-heavy test.
 
 For each test, we created four versions in the directory:
 1. `*.json`: the original Bril program in JSON form.
@@ -14,13 +14,27 @@ For each test, we created four versions in the directory:
 3. `*_opt.json`: the optimized Bril program produced by `trace.cpp`
 4. `*_opt.trace`: the trace of the optimized program, which was ran with the same inputs as the original.
 
-In each case, we compared the original and optimized traces and confirmed that both versions produced identical printed outputs (booleans or integers, depending on the program), giving us confidence that our optimization preserved the proper semantics of each program.
+In each case, we can the original (`*.trace`) and optimized (`*_opt.trace`) traces and confirm that both versions produce identical printed outputs (booleans or integers, depending on the program), giving us confidence that our optimization preserved the proper semantics of each program.
+
+Here, we have a table comparing the dynamic instructions before and after tracing.
 
 | Benchmark | Baseline Dynamic Instrs | Traced Dynamic Instrs |
 |---------|----------|----------|
 | sum_loop | 81  | 92 |
 | armstrong | 133  | 144  |
 | sum-divisors | 159  | 167  |
+
+<br>
+
+`sum-divisors` - Testing on other inputs we get:
+
+| Input | Traced Dynamic Instrs |
+|---------|----------|
+| 50 | 121 |
+| 73 | 116  |
+| 137 | 149 |
+| 174 | 195 |
+
 
 ## Hardest Part
 
