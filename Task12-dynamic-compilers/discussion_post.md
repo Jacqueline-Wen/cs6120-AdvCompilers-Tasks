@@ -4,6 +4,7 @@ Serena Zhang (syz8), Maggie Gao (mg2447), Jacqueline Wen (jw2347)
 [Source code URL](https://github.com/Jacqueline-Wen/cs6120-AdvCompilers-Tasks/tree/main/Task12-dynamic-compilers)
 
 ## Tracing
+Admittedly, we wrote a more basic version of tracing. For our trace, we stopped tracing after 10 instructions. After rebuilding the control flow with guards and reconstructing function calling and returning, we wrapped our execution in a specualtive region, and our program returns "trace_success" if all guards hold, but returns "guard_failed" if there was a deviation from the expected path. 
 
 ## Testing
 We evaluated our trace program on three tests: a custom `sum_loop` bril program and two existing benchmarks from the `core` folder in `bril/benchmarks`: `armstrong` and `sum-divisors`. Our created `sum_loop` program takes an input n and computes the sum of integers from 1 to n - 1. This gives us a simple, loop-heavy test.

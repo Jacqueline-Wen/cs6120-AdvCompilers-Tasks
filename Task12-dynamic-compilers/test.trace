@@ -1,10 +1,2 @@
-{"dest":"b","op":"const","type":"bool","value":false}
-{"dest":"x","op":"const","type":"int","value":5}
-{"op":"speculate"}
-{"dest":"x","op":"const","type":"int","value":12}
-{"args":["b"],"labels":["recover"],"op":"guard"}
-{"dest":"y","op":"const","type":"int","value":42}
-{"args":["y"],"op":"print"}
 42
-{"args":["x"],"op":"print"}
 5
