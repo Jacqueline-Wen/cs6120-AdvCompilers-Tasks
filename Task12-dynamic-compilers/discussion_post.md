@@ -36,8 +36,8 @@ Here, we have a table comparing the dynamic instructions before and after tracin
 | 137 | 149 |
 | 174 | 195 |
 
-
 ## Hardest Part
-
+The hardest part was properly reconstructing the control flow and behavior from the raw trace file. This is because it is fundamentally stream-based and gives relatively little context. 
 
 ## Michelin Star
+We believe that we deserve a michelin star because we produced a clean, working optimizer that correctly reconstructs control flow, handles calls and returns, inserts guards, and preserves program behavior across all our tests.
