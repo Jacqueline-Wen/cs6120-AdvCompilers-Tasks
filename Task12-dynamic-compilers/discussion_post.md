@@ -3,8 +3,8 @@ Serena Zhang (syz8), Maggie Gao (mg2447), Jacqueline Wen (jw2347)
 
 [Source code URL](https://github.com/Jacqueline-Wen/cs6120-AdvCompilers-Tasks/tree/main/Task12-dynamic-compilers)
 
-## Tracing
-Admittedly, we wrote a more basic version of tracing. For our trace, we stopped tracing after 10 instructions. After rebuilding the control flow with guards and reconstructing function calling and returning, we wrapped our execution in a specualtive region, and our program returns "trace_success" if all guards hold, but returns "guard_failed" if there was a deviation from the expected path. 
+## What We Did
+For our tracing setup, we modified the Bril interpreter (brili.ts) to record at most 10 dynamic instructions, giving us a short, bounded trace. After generating this trace, our trace.cpp tool processed it by rewriting branches into guard instructions and reconstructing function calls and returns. We then wrapped the transformed trace in a speculative region. If all guards succeed at runtime, execution reaches the trace_success label and commits the speculative state. Otherwise, any mismatch triggers the guard_failed label, which falls back to the original program.
 
 ## Testing
 We evaluated our trace program on three tests: a custom `sum_loop` bril program and two existing benchmarks from the `core` folder in `bril/benchmarks`: `armstrong` and `sum-divisors`. Our created `sum_loop` program takes an input n and computes the sum of integers from 1 to n - 1. This gives us a simple, loop-heavy test.
@@ -38,5 +38,6 @@ Here, we have a table comparing the dynamic instructions before and after tracin
 
 
 ## Hardest Part
+
 
 ## Michelin Star
